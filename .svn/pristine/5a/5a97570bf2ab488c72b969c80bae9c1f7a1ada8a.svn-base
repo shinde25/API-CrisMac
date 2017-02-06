@@ -1,0 +1,273 @@
+﻿using CrisMAcAPI.Models.Repository.BalanceDetailsRepository;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Models.Repository
+{
+    public class BalanceSheetRepository : IBalanceSheetRepository
+    {
+        BalanceSheetModel bs = new BalanceSheetModel();
+        public List<object> FetchData(string paramString)
+        {
+            List<object> lst = new List<object>();
+            JObject jsonData = JObject.Parse(paramString);
+
+
+            bs.Customer_Company = jsonData["Customer_Company"].ToString();
+            bs.AsOnDate = jsonData["AsOnDate"].ToString();
+            bs.QuaterEnding = jsonData["QuaterEnding"].ToString();
+            bs.Periodicity = jsonData["Periodicity"].ToString();
+            bs.Audited = jsonData["Audited"].ToString();
+            bs.FinYear = jsonData["FinYear"].ToString();
+            bs.CustomerEntityId = Convert.ToInt32(jsonData["CustomerEntityID"].ToString());
+            bs._BranchCode = jsonData["BranchCode"].ToString();
+            bs._OperationFlag = Convert.ToInt32(jsonData["OperationFlag"].ToString());
+            bs._TimeKey = Convert.ToInt32(jsonData["TimeKey"].ToString());
+
+            bs.BalanceSheetDetailSelect(bs.Customer_Company, bs.AsOnDate,
+                bs.QuaterEnding, bs.Periodicity, bs.Audited, bs.FinYear, bs.CustomerEntityId);
+            DataSet _dsAux = bs.ResultDataSet;
+
+
+            if (_dsAux.Tables.Count == 1)
+            {
+
+                var MultipleBalanceSheet = _dsAux.Tables[0].AsEnumerable().Select(x =>
+                new
+                {
+                    SNo = x.Field<dynamic>("SNo"),
+                    AsOnDate = x.Field<dynamic>("AsOnDate"),
+                    ChangeDate = x.Field<dynamic>("ChangeDate"),
+                    TimeKey = x.Field<dynamic>("TimeKey")
+                }).ToList();
+                lst.Add(MultipleBalanceSheet);
+                return lst;
+            }
+            var listAssets = bs.ResultDataTable.AsEnumerable().Select(x =>
+                    new
+                    {
+                        EWS_BS_SegmentSubGroup = x.Field<string>("EWS_BS_SegmentSubGroup"),
+                        Particulars = x.Field<string>("Particulars"),
+                        InputCategory = x.Field<string>("InputCategory"),
+                        Amount = x.Field<decimal>("Amount"),
+                        EWS_BS_ItemsAlt_Key = x.Field<int>("EWS_BS_ItemsAlt_Key"),
+                        VisibleOnScreen = x.Field<bool>("VisibleOnScreen"),
+                        Calculation= x.Field<string>("Calculation"),
+                        InputCategoryAlt_Key = Convert.ToInt32(x.Field<string>("InputCategory") == "TITLE" ? "0" : x.Field<string>("InputCategory") == "ELEMENT" ? "1" : "2")
+
+                    }).Where(x => x.EWS_BS_SegmentSubGroup == "ASSETS").ToList();
+
+            var listLiab = bs.ResultDataTable.AsEnumerable().Select(x =>
+                 new
+                 {
+                     EWS_BS_SegmentSubGroup = x.Field<string>("EWS_BS_SegmentSubGroup"),
+                     Particulars = x.Field<string>("Particulars"),
+                     InputCategory = x.Field<string>("InputCategory"),
+                     Amount = x.Field<decimal>("Amount"),
+                     Calculation = x.Field<string>("Calculation"),
+                     EWS_BS_ItemsAlt_Key = x.Field<int>("EWS_BS_ItemsAlt_Key"),
+                     VisibleOnScreen = x.Field<bool>("VisibleOnScreen"),
+                     InputCategoryAlt_Key = Convert.ToInt32(x.Field<string>("InputCategory") == "TITLE" ? "0" : x.Field<string>("InputCategory") == "ELEMENT" ? "1" : "2")
+
+                 }).Where(x => x.EWS_BS_SegmentSubGroup == "LIABILITIES").ToList();
+
+            var listIncome = bs.ResultDataTable.AsEnumerable().Select(x =>
+                 new
+                 {
+                     EWS_BS_SegmentSubGroup = x.Field<string>("EWS_BS_SegmentSubGroup"),
+                     Particulars = x.Field<string>("Particulars"),
+                     InputCategory = x.Field<string>("InputCategory"),
+                     Amount = x.Field<decimal>("Amount"),
+                     EWS_BS_ItemsAlt_Key = x.Field<int>("EWS_BS_ItemsAlt_Key"),
+                     VisibleOnScreen = x.Field<bool>("VisibleOnScreen"),
+                     Calculation = x.Field<string>("Calculation"),
+                     InputCategoryAlt_Key = Convert.ToInt32(x.Field<string>("InputCategory") == "TITLE" ? "0" : x.Field<string>("InputCategory") == "ELEMENT" ? "1" : "2")
+
+                 }).Where(x => x.EWS_BS_SegmentSubGroup == "INCOME").ToList();
+
+            var listExp = bs.ResultDataTable.AsEnumerable().Select(x =>
+                 new
+                 {
+                     EWS_BS_SegmentSubGroup = x.Field<string>("EWS_BS_SegmentSubGroup"),
+                     Particulars = x.Field<string>("Particulars"),
+                     InputCategory = x.Field<string>("InputCategory"),
+                     Amount = x.Field<decimal>("Amount"),
+                     EWS_BS_ItemsAlt_Key = x.Field<int>("EWS_BS_ItemsAlt_Key"),
+                     VisibleOnScreen = x.Field<bool>("VisibleOnScreen"),
+                     Calculation = x.Field<string>("Calculation"),
+                     InputCategoryAlt_Key = Convert.ToInt32(x.Field<string>("InputCategory") == "TITLE" ? "0" : x.Field<string>("InputCategory") == "ELEMENT" ? "1" : "2")
+
+                 }).Where(x => x.EWS_BS_SegmentSubGroup == "EXPENSES").ToList();
+
+            lst.Add(listAssets);
+            lst.Add(listLiab);
+            lst.Add(listIncome);
+            lst.Add(listExp);
+            //var _fetchList = ((IEnumerable<dynamic>)lst).ToList();
+
+            if (bs.CustomerEntityId != 0)
+            {
+                object EditableData = new
+                {
+                    FinYear = bs.ResultDataTable.Rows[1]["FinYear"]
+                                           ,
+                    Audited = bs.ResultDataTable.Rows[1]["Audited"]
+                                           ,
+                    Periodicity = bs.ResultDataTable.Rows[1]["Periodicity"]
+                                           ,
+                    QuaterEnding = bs.ResultDataTable.Rows[1]["QuaterEnding"]
+
+                                           // DtofSubmission = bs.ResultDataTable.Rows[1]["DtofSubmission"].ToString() == "" ? "" : Convert.ToDateTime(bs.ResultDataTable.Rows[1]["DtofSubmission"]).ToString("dd/MM/yyyy")
+                                           ,
+                    DueDate = bs.ResultDataTable.Rows[1]["AsOnDate"].ToString() == "" ? "" : Convert.ToDateTime(bs.ResultDataTable.Rows[1]["AsOnDate"]).ToString("dd/MM/yyyy")
+                };
+
+                var CreatedModifiedBy = bs.ResultDataTable.Rows[1]["CreatedModifiedBy"] == null ? "" : bs.ResultDataTable.Rows[1]["CreatedModifiedBy"].ToString();
+                var IsMainTable = bs.ResultDataTable.Rows[1]["IsMainTable"] == null ? "" : bs.ResultDataTable.Rows[1]["IsMainTable"].ToString();
+                var ChangedFields = bs.ResultDataTable.Rows[1]["ChangedFields"] == null ? "" : bs.ResultDataTable.Rows[1]["ChangedFields"].ToString();
+                var AuthorisationStatus = bs.ResultDataTable.Rows[1]["AuthorisationStatus"] == null ? "" : bs.ResultDataTable.Rows[1]["AuthorisationStatus"].ToString();
+                var listValidations = new { CreatedModifiedBy = CreatedModifiedBy, IsMainTable = IsMainTable, ChangedFields = ChangedFields, AuthorisationStatus = AuthorisationStatus };
+
+                lst.Add(EditableData);
+                lst.Add(listValidations);
+            }
+
+            var lstGrandTotal = bs.ResultDataSet.Tables[1].AsEnumerable().Select(x =>
+                 new
+                 {
+                     EWS_BS_SegmentGroup = x.Field<string>("EWS_BS_SegmentGroup"),
+                     EWS_BS_SegmentSubGroup = x.Field<string>("EWS_BS_SegmentSubGroup"),
+                     Amount = x.Field<decimal>("Amount")
+                 }).ToList();
+
+            lst.Add(lstGrandTotal);
+            return lst;
+        }
+        public List<object> GetAuxdata(string paramString)
+        {
+            JObject jsonData = JObject.Parse(paramString);
+
+            bs._BranchCode = jsonData["BranchCode"].ToString();
+            bs._OperationFlag = Convert.ToInt32(jsonData["OperationFlag"].ToString());
+            bs._TimeKey = Convert.ToInt32(jsonData["TimeKey"].ToString());
+
+            bs.Customer_Company = jsonData["CustomerCompany"].ToString();
+            bs.SearchString = jsonData["CoSearchString"].ToString();
+            bs.BalanceSheetDetailAuxSelect();
+            DataSet _dsAux = bs.ResultDataSet;
+            if (bs.Customer_Company == "Customer")
+            {
+                var lstAux = _dsAux.Tables[0].AsEnumerable().Select(x =>
+                      new
+                      {
+                          CustomerEntityId = x.Field<Int32>("CustomerEntityId"),
+                          CustomerId = x.Field<string>("CustomerId"),
+                          CustomerName = x.Field<string>("CustomerName")
+                      }).ToList();
+                var _CustList = ((IEnumerable<dynamic>)lstAux).ToList();
+                return _CustList;
+            }
+            else
+            {
+                var lstAux = _dsAux.Tables[0].AsEnumerable().Select(x =>
+                      new
+                      {
+                          Company_Name = x.Field<string>("Company_Name"),
+
+                          CompanyAlt_Key = x.Field<Int32>("CompanyAlt_Key")
+                      }).ToList();
+                var _CustList = ((IEnumerable<dynamic>)lstAux).ToList();
+                return _CustList;
+            }
+
+            return null;
+        }
+        public List<object> GetMetaData()
+        {
+            bs.BalanceSheetDetailSelectParameterised();
+            DataSet _dsMst = bs.ResultDataSet;
+            List<object> lst = new List<object>();
+
+            var lstFinYear = _dsMst.Tables[0].AsEnumerable().Select(x =>
+                    new
+                    {
+                        Code = x.Field<Int32>("Code"),
+                        Description = x.Field<string>("Description")
+                    }).ToList();
+
+            var lstAudited = _dsMst.Tables[1].AsEnumerable().Select(x =>
+                new
+                {
+                    Code = x.Field<string>("Code"),
+                    Description = x.Field<string>("Description")
+                }).ToList();
+
+            var lstPeriodicity = _dsMst.Tables[2].AsEnumerable().Select(x =>
+                new
+                {
+                    Code = x.Field<string>("Code"),
+                    Description = x.Field<string>("Description")
+                }).ToList();
+
+
+            var lstQuarterEnding = _dsMst.Tables[3].AsEnumerable().Select(x =>
+                new
+                {
+                    Code = x.Field<string>("Code"),
+                    Description = x.Field<string>("Description"),
+                    AsOnDate = x.Field<string>("AsOnDate")
+                }).ToList();
+            //-----------------------------Balance Sheet Meta Data(Akshay)------------------------------
+            var BalnceSheetMetaData = _dsMst.Tables[4].AsEnumerable().Select(x =>
+              new
+              {
+                  FrmName = x.Field<string>("FrmName"),
+                  CtrlName = x.Field<string>("CtrlName"),
+                  FldCaption = x.Field<string>("FldCaption"),
+                  FldDataType = x.Field<string>("FldDataType"),
+                  MinLength = x.Field<Int16>("MinLength"),
+                  MaxLength = x.Field<Int16>("MaxLength"),
+                  FldGrdWidth = x.Field<Int16>("FldGrdWidth"),
+                  FldSearch = x.Field<string>("FldSearch"),
+                  ErrorCheck = x.Field<string>("ErrorCheck"),
+                  DataSeq = x.Field<Int16>("DataSeq"),
+                  FldGridView = x.Field<string>("FldGridView"),
+                  CriticalErrorType = x.Field<string>("CriticalErrorType"),
+                  MsgFlag = x.Field<string>("MsgFlag"),
+                  MsgDescription = x.Field<string>("MsgDescription"),
+                  ScreenFieldNo = x.Field<int>("ScreenFieldNo"),
+                  ViableForSCD2 = x.Field<string>("ViableForSCD2"),
+                  Editable = x.Field<string>("Editable"),
+                  Hide = x.Field<string>("Hide"),
+                  AllowToolTip = x.Field<string>("AllowToolTip"),
+                  ReferenceColumnName = x.Field<string>("ReferenceColumnName"),
+                  ReferenceTableName = x.Field<string>("ReferenceTableName"),
+                  IsAmount = x.Field<string>("IsAmount"),
+                  MOC_Flag = x.Field<string>("MOC_Flag")
+              }).ToList();
+
+            lst.Add(lstFinYear);
+            lst.Add(lstAudited);
+            lst.Add(lstPeriodicity);
+            lst.Add(lstQuarterEnding);
+            lst.Add(BalnceSheetMetaData);//----------------Add Meta Data in List---------------------
+
+            var _metaLst = ((IEnumerable<dynamic>)lst).ToList();
+            return _metaLst;
+        }
+        public int InsertUpdateData(string jsonData)
+        {
+            int _resultvalue = 0;
+            // var results = JsonConvert.DeserializeObject<dynamic>(res);
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            bs = serializer.Deserialize<BalanceSheetModel>(jsonData);
+            _resultvalue = bs.Call_BalanceSheetDetailInsertUpdate(bs);
+
+            return _resultvalue;
+        }
+    }
+}

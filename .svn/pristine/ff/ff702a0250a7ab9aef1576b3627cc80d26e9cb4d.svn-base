@@ -1,0 +1,81 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.CommonComponent.Models.Repository.CommonMetaMasterRepository;
+using CrisMAcAPI.Filter;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.CommonComponent.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class CommonMetaMasterController : ApiController
+    {
+        UtilityWeb objutility = new UtilityWeb();
+        ICommonMetaMasterRepository repository;
+
+        public CommonMetaMasterController(ICommonMetaMasterRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [Route("CrisMAc/CommonMetaMaster/{param}")]
+        [HttpGet]
+        public string GetMasterMetaData(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objFetchData = repository.FetchData(param);
+            var json = new JavaScriptSerializer().Serialize(objFetchData);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/CommonMetaMasterAuxData/{param}")]
+        [HttpGet]
+        public string GetMasterAuxData(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxData = repository.GetAuxMasterdata(param);
+            var json = new JavaScriptSerializer().Serialize(objAuxData);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/CommonMetaMasterSaveData/")]
+        [HttpPost]
+        public HttpResponseMessage GetMasterSaveData()
+        {
+            int result = -1;
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+        }
+
+        [Route("CrisMAc/CommonMetaMasterGetEventTemplate/{param}")]
+        [HttpGet]
+        public string CommonMetaMasterGetEventTemplate(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objEventTempData = repository.GetEventTemplate(param);
+            var json = new JavaScriptSerializer().Serialize(objEventTempData);
+            return objutility.EnryptString(json);
+        }
+    }
+}

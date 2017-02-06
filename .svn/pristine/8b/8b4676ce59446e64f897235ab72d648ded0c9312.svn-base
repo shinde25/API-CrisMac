@@ -1,0 +1,105 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Areas.Axis_MOC.Models
+{
+    public class CustAccountMocModel: CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+
+        public string  CustomerEntityID { get; set; }
+        public string XmlData { get; set; }
+        public int AssetClassAlt_key { get; set; }
+        public string NPADt { get; set; }
+        public float  SecurityValue { get; set; }
+        public int AddlProvPer { get; set; }
+        //public string _dateCreatedmodified { get; set; }
+
+
+        public void Incorporation()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@Customer_ID",CustomerEntityID),
+                                               new SqlParameter("@TimeKey",_LastQtrDateKey),
+                                               new SqlParameter("@Mode",_OperationMode)
+
+                                              };
+            spName = "[dbo].[CustAccountMocSelect]";
+            ExecuteSelectDataSet();
+        }
+
+        public void Parametrice()
+        {
+            sqlParams = new SqlParameter[] {
+                                              
+                                               new SqlParameter("@TimeKey",_LastQtrDateKey)
+                                              };
+            spName = "[dbo].[ParametericSP]";
+            ExecuteSelectDataSet();
+        }
+
+
+        public void CustAccountGrid()
+        {
+            sqlParams = new SqlParameter[] {
+
+                                               new SqlParameter("@TimeKey",_LastQtrDateKey)
+                                              };
+            spName = "[dbo].[AssetClassMeta]";
+            ExecuteSelectDataSet();
+        }
+
+        public object CustAccountMOCInsertUpdate()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[dbo].[CustAccountMocInsertUpdate]");
+            try
+            {
+                using (command)
+                {
+
+                    database.AddInParameter(command, "@CustomerId", System.Data.DbType.String, CustomerEntityID);
+                    database.AddInParameter(command, "@AssetClassAlt_key", System.Data.DbType.Int32, AssetClassAlt_key);
+                    database.AddInParameter(command, "@NPADt", System.Data.DbType.String, NPADt);
+                    database.AddInParameter(command, "@SecurityValue", System.Data.DbType.Decimal, SecurityValue);
+                    database.AddInParameter(command, "@AddlProvPer", System.Data.DbType.Int32, AddlProvPer);
+                    database.AddInParameter(command, "@AccountData", System.Data.DbType.String, XmlData);
+                    database.AddInParameter(command, "@EffectiveFromTimeKey", System.Data.DbType.Int16, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "@EffectiveToTimeKey", System.Data.DbType.Int16, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "@CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+                    database.AddInParameter(command, "@DateCreatedModifiedApproved", System.Data.DbType.String, _dateCreatedmodified);
+                    database.AddInParameter(command, "@OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddOutParameter(command, "@D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.AddInParameter(command, "@AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "@MenuID", System.Data.DbType.Int32, _MenuID);
+                    database.AddInParameter(command, "@Remark", System.Data.DbType.String, _Remark);
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _LastQtrDateKey);
+                    database.AddOutParameter(command, "@Result", System.Data.DbType.Int32, -1);
+
+                    //database.AddInParameter(command, "@EffectChangeFromDate", System.Data.DbType.String, _EffectiveFromTimeKey);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            JObject DBReturnResult = new JObject();
+
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+
+            return DBReturnResult;
+        }
+
+    }
+}

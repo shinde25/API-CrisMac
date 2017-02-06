@@ -1,0 +1,44 @@
+﻿using CrisMAcAPI.Areas.CommonComponent.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.UPGRADATION.Models.Repository.ViewAuxSelect
+{
+    public class ViewAuxSelectRepository : IViewAuxSelectRepository
+    {
+        ViewAuxSelectModel _ViewAuxSelectModel;
+        DataSet _DataSet;
+        JavaScriptSerializer serializer;
+
+        public List<object> CustomerAuxSelectRepo(string ParaStr)
+        {
+            _ViewAuxSelectModel = new ViewAuxSelectModel();
+            serializer = new JavaScriptSerializer();
+            _ViewAuxSelectModel = serializer.Deserialize<ViewAuxSelectModel>(ParaStr);
+
+            _DataSet = new DataSet();
+            _ViewAuxSelectModel.CustomerAuxSelectModel();
+            _DataSet = _ViewAuxSelectModel.ResultDataSet;
+
+            return _DataSet.ToList();
+        }
+
+        
+        public List<object> AccountAuxSelectRepo(string ParaStr)
+        {
+            _ViewAuxSelectModel = new ViewAuxSelectModel();
+            serializer = new JavaScriptSerializer();
+            _ViewAuxSelectModel = serializer.Deserialize<ViewAuxSelectModel>(ParaStr);
+
+            _DataSet = new DataSet();
+            _ViewAuxSelectModel.AccountAuxSelectModel();
+            _DataSet = _ViewAuxSelectModel.ResultDataSet;
+
+            return _DataSet.ToList();
+        }
+    }
+}

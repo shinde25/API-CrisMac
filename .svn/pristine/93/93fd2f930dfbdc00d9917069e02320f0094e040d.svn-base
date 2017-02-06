@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+namespace CrisMAcAPI.Areas.FAM.Models.Repository.AssetTransferRepository
+{
+    public interface IAssetTransferRepository
+    {
+        //List<object> GetAuxdata(string paramString);
+        //List<object> GetMetaData();
+        //List<object> FetchData(string paramString);
+         List<object> InsertUpdateData(string jsonData);
+    }
+}

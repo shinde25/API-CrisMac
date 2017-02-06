@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrisMAcAPI.Areas.UPGRADATION.Models.Repository.ViewAuxSelect
+{
+    public interface IViewAuxSelectRepository
+    {
+        List<object> CustomerAuxSelectRepo(string ParaStr);
+        List<object> AccountAuxSelectRepo(string ParaStr);
+    }
+}

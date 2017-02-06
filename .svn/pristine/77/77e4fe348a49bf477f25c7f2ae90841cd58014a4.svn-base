@@ -1,0 +1,149 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Filter;
+using CrisMAcAPI.Models.Repository.CustomerAllocationRepository;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+
+
+namespace CrisMAcAPI.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class CustomerAllocationController : ApiController
+    {
+        ICustomerAllocationRepository repository;
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        UtilityWeb objutility = new UtilityWeb();
+
+        public CustomerAllocationController(ICustomerAllocationRepository repository)
+        {
+            this.repository = repository;
+        }
+
+
+
+        //      parmatrised    **************************** //
+        [Route("CrisMAc/GetMetaCustomerAllocation/{param}")]
+        [HttpGet]
+        public string GetMetaCustomerAllocation(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetMetaData(param); // repository's GetMetaData() call for paramatrised
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        //      AUX     *************************//
+        [Route("CrisMAc/CustomerAllocationAuxData/{param}")]
+        [HttpGet]
+        public string GetAuxCustomerAllocation(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param); // repository's GetAuxData() call
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/UserAllocationAuxData/{param}")]
+        [HttpGet]
+        public string GetAuxUserAllocation(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetUserInfoFetch(param); // repository's GetAuxData() call
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+
+        //      FETCH   ************************    //
+        [Route("CrisMAc/FetchCustomerAllocation/{param}")]
+        [HttpGet]
+        public string FetchCustomerAllocation(string param)
+        {
+            
+            JObject JsonParam = new JObject();            
+            param = objutility.DecryptString(param);
+            string[] strJson = param.Split(',','{','}');          
+            if(!strJson[3].ToString().Contains("CustomerId"))
+            {
+                JsonParam.Add("CustomerEntityId", strJson[0]);
+                JsonParam.Add("StackHolder", strJson[1]);
+                JsonParam.Add("UserId", strJson[2]);
+                JsonParam.Add("StackHolderAndOr", strJson[3]);
+                JsonParam.Add("AllocationCriteria", strJson[4]);
+                JsonParam.Add("AllocatedValue", strJson[5]);
+                JsonParam.Add("AllocationCriteriaAndOr", strJson[6]);
+                JsonParam.Add("ExposureRange", strJson[7]);
+                JsonParam.Add("RangeValue1", strJson[8]);
+                JsonParam.Add("RangeValue2", strJson[9]);
+                JsonParam.Add("_userLoginId", strJson[10]);
+                JsonParam.Add("_BranchCode", strJson[11]);
+                JsonParam.Add("_TimeKey", strJson[12]);
+                JsonParam.Add("_OperationMode", strJson[13]);
+                var objAuxDetail = repository.FetchData(JsonParam.ToString());  // repository's FetchData() call
+                var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+                return objutility.EnryptString(json);                                
+            }
+            else
+            {
+                var objAuxDetail = repository.FetchData(param);  // repository's FetchData() call
+                var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+                return objutility.EnryptString(json);
+            }
+            //JsonParam.Add("CustomerEntityId",strJson[1]);
+            //JsonParam.Add("StackHolder",strJson[2]);
+            //JsonParam.Add("UserId",strJson[3]);
+            //JsonParam.Add("StackHolderAndOr",strJson[4]);
+            //JsonParam.Add("AllocationCriteria",strJson[5]);
+            //JsonParam.Add("AllocatedValue",strJson[6]);
+            //JsonParam.Add("AllocationCriteriaAndOr",strJson[7]);
+            //JsonParam.Add("ExposureRange",strJson[8]);
+            //JsonParam.Add("RangeValue1",strJson[9]);
+            //JsonParam.Add("RangeValue2",strJson[10]);
+            //JsonParam.Add("BranchCode",strJson[11]);
+            //JsonParam.Add("_TimeKey",strJson[12]);
+            //JsonParam.Add("_OperationMode",strJson[13]);            
+            //var objAuxDetail = repository.FetchData(JsonParam.ToString());  // repository's FetchData() call
+            //var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            //return objutility.EnryptString(json);
+        }
+        
+
+        //      INSERT UPDATE SP    ********************  //
+        [Route("CrisMAc/InsertCustomerAllocation/")]
+        [HttpPost]
+        public HttpResponseMessage InsertCustomerAllocation()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateData(_mainData); // repository's InsertUpdateData() call
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+    }
+}

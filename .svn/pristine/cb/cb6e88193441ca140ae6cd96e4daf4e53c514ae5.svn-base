@@ -1,0 +1,13 @@
+﻿using CrisMAcAPI.Models.Repository.CommonInterface;
+using System.Collections.Generic;
+
+namespace CrisMAcAPI.Areas.CommonComponent.Models.Repository.CommonMasterRepository
+{
+    public interface ICommonMasterRepository : ICommonInterface {
+
+        List<object> FetchData_CheckPending(string paramString);
+        List<object> FetchReportData(string paramString);
+
+    }
+
+}

@@ -1,0 +1,152 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Areas.FAM.Models
+{
+    public class BranchCreationModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string BranchCode { get; set; }
+        //public int _TimeKey { get; set; }
+        public string ScreenFlag { get; set; }
+        public int RegionAlt_Key { get; set; }
+        public int ZoneAlt_Key { get; set; }
+        public string BranchSearchString { get; set; }
+        public int flag { get; set; }
+        public string BranchName { get; set; }
+        public int ASolId { get; set; }
+        public int RSolId { get; set; }
+        public string BranchRegion { get; set; }
+        public string BranchZone { get; set; }
+        public string BranchAreaC { get; set; }
+        public string State { get; set; }
+        public string BranchDistrict { get; set; }
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+        public string Place { get; set; }
+        public int PinCode { get; set; }
+        public string City { get; set; }
+        public string RBILicenseNo { get; set; }
+        public string RBILicenseDate { get; set; }
+        public int AuthorizationNo { get; set; }
+        public string AuthorizationDate { get; set; }
+        public string RBIPart1 { get; set; }
+        public string RBIPart2 { get; set; }
+        public string BranchOpenDate { get; set; }
+        public string OpenTime { get; set; }
+        public string CloseTime { get; set; }
+        public int NonWorkingDay { get; set; }
+        public int NonBankingDay { get; set; }
+        
+
+
+        //Aux
+        public DataSet BranchAuxData()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("BranchAuxData");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@BranchCode", System.Data.DbType.String, BranchCode); 
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey); 
+                    database.AddInParameter(command, "@ScreenFlag", System.Data.DbType.String, ScreenFlag); 
+                    database.AddInParameter(command, "@RegionAlt_Key", System.Data.DbType.Int32,RegionAlt_Key); 
+                    database.AddInParameter(command, "@ZoneAlt_Key", System.Data.DbType.Int32, ZoneAlt_Key); 
+                    database.AddInParameter(command, "@BranchSearchString", System.Data.DbType.String, BranchSearchString); 
+                    database.AddInParameter(command, "@flag", System.Data.DbType.Int32, flag);
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //Select fetch
+        public DataSet FetchBranchDetails()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("BranchSelectData");
+            DataSet ds = new DataSet();
+
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@BranchCode", System.Data.DbType.String, BranchCode);
+                    database.AddInParameter(command, "@ZoneAlt_Key", System.Data.DbType.Int32, ZoneAlt_Key);
+                    database.AddInParameter(command, "@RegionAlt_Key", System.Data.DbType.Int32, RegionAlt_Key);
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //InsertUpdate
+        public object InsertUpdateBranchDetails()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("BranchInsertUpdateData");
+            DataSet ds = new DataSet();
+
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@BranchCode", System.Data.DbType.String, BranchCode);
+                    database.AddInParameter(command, "@BranchName", System.Data.DbType.String, BranchName);
+                    database.AddInParameter(command, "@ASolId", System.Data.DbType.Int32, ASolId);
+                    database.AddInParameter(command, "@RSolId", System.Data.DbType.Int32, RSolId);
+                    database.AddInParameter(command, "@BranchRegion", System.Data.DbType.String, BranchRegion);
+                    database.AddInParameter(command, "@BranchZone", System.Data.DbType.String, BranchZone);
+                    database.AddInParameter(command, "@BranchAreaC", System.Data.DbType.String, BranchAreaC);
+                    database.AddInParameter(command, "@State", System.Data.DbType.String, State);
+                    database.AddInParameter(command, "@BranchDistrict", System.Data.DbType.String, BranchDistrict);
+                    database.AddInParameter(command, "@Address1", System.Data.DbType.String, Address1);
+                    database.AddInParameter(command, "@Address2", System.Data.DbType.String, Address2);
+                    database.AddInParameter(command, "@Place", System.Data.DbType.String, Place);
+                    database.AddInParameter(command, "@PinCode", System.Data.DbType.Int32, PinCode);
+                    database.AddInParameter(command, "@City", System.Data.DbType.String, City);
+                    database.AddInParameter(command, "@RBILicenseNo", System.Data.DbType.Int32, RBILicenseNo);
+                    database.AddInParameter(command, "@RBILicenseDate", System.Data.DbType.Date, RBILicenseDate);
+                    database.AddInParameter(command, "@AuthorizationNo ", System.Data.DbType.Int32, AuthorizationNo);
+                    database.AddInParameter(command, "@AuthorizationDate ", System.Data.DbType.Date, AuthorizationDate);
+                    database.AddInParameter(command, "@RBIPart1 ", System.Data.DbType.String, RBIPart1);
+                    database.AddInParameter(command, "@RBIPart2 ", System.Data.DbType.String, RBIPart2);
+                    database.AddInParameter(command, "@BranchOpenDate ", System.Data.DbType.Date, BranchOpenDate);
+                    database.AddInParameter(command, "@OpenTime ", System.Data.DbType.Date, OpenTime);
+                    database.AddInParameter(command, "@CloseTime ", System.Data.DbType.Date, CloseTime);
+                    database.AddInParameter(command, "@NonWorkingDay ", System.Data.DbType.Int32, NonWorkingDay);
+                    database.AddInParameter(command, "@NonBankingDay ", System.Data.DbType.Int32, NonBankingDay);
+                    ds = database.ExecuteDataSet(command);
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+
+            return DBReturnResult;
+        }
+
+    }
+}

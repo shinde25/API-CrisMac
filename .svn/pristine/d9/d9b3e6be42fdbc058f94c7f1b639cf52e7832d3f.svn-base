@@ -1,0 +1,55 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.LOS.Models.Repository.CustomerRepository;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.LOS.Controllers
+{
+    public class LosCustomerController : ApiController
+    {
+        ICustomerRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+
+        public LosCustomerController(ICustomerRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [Route("CrisMAc/ELS_GetMasterList/{Parameters}")]
+        [HttpGet]
+        public string Los_GetMasterList(string Parameters)
+        {
+            Parameters = objutility.DecryptString(Parameters);
+            var LstData = repository.GetMasterData(Parameters);
+            var json = JsonConvert.SerializeObject(LstData, Formatting.Indented);
+            return objutility.EnryptString(json);
+        }
+
+       
+
+        [Route("CrisMAc/InsertQECApplication/")]
+        [HttpPost]
+        public string InsertQECApplication()
+        {
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                //  var _mainData = objutility.DecryptString(_data); ;
+                var ResultData = repository.InsertQECApplication(_data);
+                var json = JsonConvert.SerializeObject(ResultData);
+                return objutility.EnryptString(json);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+      
+    }
+}

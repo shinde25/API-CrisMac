@@ -1,0 +1,14 @@
+﻿using CrisMAcAPI.Models.Repository.CommonInterface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Models.Repository.SearchStringRepository
+{
+    public interface ISearchStringRepository : ICommonInterface 
+    {
+         object KeyWordInsertUpdateData(string jsonData);
+        List<object> GetAuxCustdata(string paramString);
+    }
+}

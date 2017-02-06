@@ -1,0 +1,82 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Filter;
+using CrisMAcAPI.Models.Repository.CompanyWiseActivity;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class CompanyWiseActivityController : ApiController
+    {
+        ICompanyWiseActivityRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        public CompanyWiseActivityController(ICompanyWiseActivityRepository repository)
+        {
+            this.repository = repository;
+        }
+        [Route("CrisMAc/CompanyWiseActivityMetaData/{param}")]
+        [HttpGet]
+        public string GetMetaCompanyWiseActivity(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetMetaData(param);
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+        [Route("CrisMAc/CompanyWiseActivityAuxData/{param}")]
+        [HttpGet]
+        public string GetAuxCompanyWiseActivity(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param);
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+        [Route("CrisMAc/CompanyWiseActivityData/{param}")]
+        [HttpGet]
+        public string GetCompanyWiseActivity(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.FetchData(param);
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+        [Route("CrisMAc/AddCompanyWiseActivityData/")]
+        [HttpPost]
+        public HttpResponseMessage InsertCompanyWiseActivity()
+        {
+            object result = null;
+            
+            JObject result1 = new JObject();
+            result1.Add("Result","-1" );
+            result1.Add("D2Ktimestamp", "0");
+
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.CompanyWiseActivityInsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result1.ToString()));
+
+                return response;
+            }
+        }
+    }
+}

@@ -1,0 +1,77 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Models.Repository.BalanceDetailsRepository;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Controllers
+{
+    public class BalanceSheetController : ApiController
+    {
+        IBalanceSheetRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+
+        public BalanceSheetController(IBalanceSheetRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [Route("CrisMAc/GetBalanceSheetAux/{param}")]
+        [HttpGet]
+        public string GetAuxDetails(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param);
+            JavaScriptSerializer jser = new JavaScriptSerializer() { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
+            var json = jser.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/GetBalanceSheetMetaData")]
+        [HttpGet]
+        public string GetMasterData()
+        {
+            var objMetaData = repository.GetMetaData();
+            var json = new JavaScriptSerializer().Serialize(objMetaData);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/FetchBalanceSheetData/{param}")]
+        [HttpGet]
+        public string FetchBalanceSheetData(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objFetchDetail = repository.FetchData(param);
+            var json = new JavaScriptSerializer().Serialize(objFetchDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/ModifyBalanceSheet/")]
+        [HttpPost]
+        public HttpResponseMessage ModifyBalanceSheet()
+        {
+            int result = -1;
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+        }
+
+    }
+}

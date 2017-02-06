@@ -1,0 +1,156 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Models.Repository.CompanyWiseActivity
+{
+    public class CompanyWiseActivityRepository : ICompanyWiseActivityRepository
+    {
+        CompanyWiseActivityModel ObjSearchStringModel;
+        DataSet _DataSet;
+        //JavaScriptSerializer serializer;
+
+        public object CompanyWiseActivityInsertUpdateData(string jsonData)
+        {
+            object rval = null;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            CompanyWiseActivityModel jSonModel = serializer.Deserialize<CompanyWiseActivityModel>(jsonData);
+
+            rval = jSonModel.CompanyWiseActivitySave();
+
+            return rval;
+        }
+
+        public List<object> FetchData(string paramString)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ObjSearchStringModel = new CompanyWiseActivityModel();
+            ObjSearchStringModel = serializer.Deserialize<CompanyWiseActivityModel>(paramString);
+            ObjSearchStringModel.CompanyWiseActivityFetch();
+            _DataSet = ObjSearchStringModel.ResultDataSet;
+
+            return _DataSet.ToList();
+            //DataSet _FetchDataAuxDS = ObjSearchStringModel.ResultDataSet;
+            //List<object> LstObj = new List<object>();
+
+            //var DataVal = _FetchDataAuxDS.Tables[0].AsEnumerable().Select(x =>
+            //  new
+            //  {
+            //      ActivityGroup = x.Field<string>("ActGroup"),
+            //      CompanyCode = x.Field<int>("CompanyCode"),
+            //      ActivityCode = x.Field<Int16>("ActivityAlt_Key"),
+            //      ActivityName = x.Field<string>("ActivityName"),
+            //      Weightage = x.Field<decimal>("ActivityWeightage"),
+            //      IsMainTable = x.Field<string>("IsMainTable"),
+            //      CreatedModifiedBy = x.Field<string>("CreatedModifiedBy"),
+            //      AuthorisationStatus = x.Field<string>("AuthorisationStatus"),
+            //      D2Ktimestamp = x.Field<int>("D2Ktimestamp")
+            //  }).Take(1).ToList();
+
+            //var Data = _FetchDataAuxDS.Tables[0].AsEnumerable().Select(x =>
+            //  new
+            //  {
+            //      ActivityGroup = x.Field<string>("ActGroup"),
+            //      CompanyCode = x.Field<int>("CompanyCode"),
+            //      ActivityCode = x.Field<Int16>("ActivityAlt_Key"),
+            //      ActivityName = x.Field<string>("ActivityName"),
+            //      Weightage = x.Field<decimal>("ActivityWeightage")                  
+            //  }).ToList();
+
+            //LstObj.Add(DataVal);
+
+            //LstObj.Add(Data);
+
+            //var DataModelList = ((IEnumerable<dynamic>)LstObj).ToList();
+            //return DataModelList;
+        }
+
+        public List<object> GetAuxdata(string paramString)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ObjSearchStringModel = new CompanyWiseActivityModel();
+            ObjSearchStringModel = serializer.Deserialize<CompanyWiseActivityModel>(paramString);
+            ObjSearchStringModel.CompanyWiseActivityAux();
+            _DataSet = ObjSearchStringModel.ResultDataSet;
+            return _DataSet.ToList();
+
+            //var CmpInd = _SearchStringAuxDS.Tables[0].AsEnumerable().Select(x =>
+            //    new
+            //    {
+            //        CompanyCode = x.Field<string>("CompanyCode"),
+            //        CompanyAltKey = x.Field<dynamic>("CompanyAltKey"),
+            //        CompanyName = x.Field<string>("CompanyName")
+
+            //    }).ToList();
+
+
+            //LstObj.Add(CmpInd);
+
+            //var DataModelList = ((IEnumerable<dynamic>)LstObj).ToList();
+            //return DataModelList;
+        }
+
+        public List<object> GetMetaData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<object> GetMetaData(String paramString)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            ObjSearchStringModel = new CompanyWiseActivityModel();
+            ObjSearchStringModel = serializer.Deserialize<CompanyWiseActivityModel>(paramString);
+            ObjSearchStringModel.CompanyWiseActivitygMeta('Y');
+            _DataSet = ObjSearchStringModel.ResultDataSet;
+            return _DataSet.ToList();
+
+            //List<object> LstObj = new List<object>();
+
+
+            //var ActivityGroup = _SearchStringAuxDS.Tables[0].AsEnumerable().Select(x =>
+            //    new
+            //    {
+            //        ActivityGroup = x.Field<string>("ActivityGroup")
+            //    }).ToList();
+            //var ActivityName = _SearchStringAuxDS.Tables[1].AsEnumerable().Select(x =>
+            //   new
+            //   {
+            //       ActivityAlt_Key = x.Field<Int16>("ActivityAlt_Key"),
+            //       ActivityName = x.Field<string>("ActivityName"),
+            //       ActivityGroup = x.Field<string>("ActivityGroup"),
+            //       IndustryName = x.Field<string>("IndustryName")
+            //   }).ToList();
+            //var Industry = _SearchStringAuxDS.Tables[2].AsEnumerable().Select(x =>
+            //   new
+            //   {
+            //       IndustryName = x.Field<string>("IndustryName"),
+            //       ActivityGroup = x.Field<string>("ActivityGroup")
+
+            //   }).ToList();
+            //var Company_Customer= _SearchStringAuxDS.Tables[3].AsEnumerable().Select(x =>
+            //new
+            //{
+
+            //    Code = x.Field<string>("Code"),
+            //    Description = x.Field<string>("Description"),
+            //    OrderKey = x.Field<int>("OrderKey")
+            //}).ToList();
+           
+            //LstObj.Add(ActivityGroup);
+            //LstObj.Add(ActivityName);
+            //LstObj.Add(Industry);
+            //LstObj.Add(Company_Customer);
+
+            //var DataModelList = ((IEnumerable<dynamic>)LstObj).ToList();
+            //return DataModelList;
+        }
+
+        public int InsertUpdateData(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

@@ -1,0 +1,89 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.Alert.Models.Repository.ProspectMiscInfo;
+using CrisMAcAPI.Filter;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.Alert.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class ProspectMiscInfoController : ApiController
+    {
+        IProspectMiscInfoRepository repository;
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        UtilityWeb objutility = new UtilityWeb();
+
+        public ProspectMiscInfoController(IProspectMiscInfoRepository repository)
+        {
+            this.repository = repository;
+        }
+        [Route("CrisMAc/GetMetaProspectMiscInfo/{param}")]
+        [HttpGet]
+        public string GetMetaProspectMiscInfo(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetMetaData(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/ProspectMiscInfoAuxData/{param}")]
+        [HttpGet]
+        public string ProspectMiscInfoAuxData(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param);
+            var json = new JavaScriptSerializer().Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/FetchProspectMiscInfo/{param}")]
+        [HttpGet]
+        public string FetchProspectMiscInfo(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.FetchData(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [Route("CrisMAc/InsertBulkProspectMiscInfo/")]
+        [HttpPost]
+        public HttpResponseMessage InsertProspectMiscInfo()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+
+
+
+    }
+}

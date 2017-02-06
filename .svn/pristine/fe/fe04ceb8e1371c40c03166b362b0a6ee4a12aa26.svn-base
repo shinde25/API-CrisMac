@@ -1,0 +1,101 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Filter;
+using CrisMAcAPI.Models.Repository.BalanceDetailsRepository;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class BalanceSheetController : ApiController
+    {
+        IBalanceSheetRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+
+        public BalanceSheetController(IBalanceSheetRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [Route("CrisMAc/GetBalanceSheetAux/{param}")]
+        [HttpGet]
+        public string GetAuxDetails(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param);
+            JavaScriptSerializer jser = new JavaScriptSerializer() { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
+            var json = jser.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/GetBalanceSheetMetaData")]
+        [HttpGet]
+        public string GetMasterData()
+        {
+            var objMetaData = repository.GetMetaData();
+            var json = new JavaScriptSerializer().Serialize(objMetaData);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/FetchBalanceSheetData/{param}")]
+        [HttpGet]
+        public string FetchBalanceSheetData(string param)
+        {
+            //param = objutility.DecryptString(param);
+            //var objFetchDetail = repository.FetchData(param);
+            //var json = new JavaScriptSerializer().Serialize(objFetchDetail);
+            //return objutility.EnryptString(json);
+
+            JObject JsonParam = new JObject();
+            param = objutility.DecryptString(param);
+            string[] strJson = param.Split(',', '{', '}');
+
+            JsonParam.Add("FinYear", strJson[0]);
+            JsonParam.Add("Audited", strJson[1]);
+            JsonParam.Add("Periodicity", strJson[2]);
+            JsonParam.Add("QuaterEnding", strJson[3]);
+            JsonParam.Add("AsOnDate", strJson[4]);
+            JsonParam.Add("Customer_Company", strJson[5]);
+            JsonParam.Add("CustomerEntityID", strJson[6]);
+            JsonParam.Add("OperationFlag", strJson[7]);
+            JsonParam.Add("BranchCode", strJson[8]);
+            JsonParam.Add("TimeKey", strJson[9]);
+
+            var objAuxDetail = repository.FetchData(JsonParam.ToString());  // repository's FetchData() call
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/ModifyBalanceSheet/")]
+        [HttpPost]
+        public HttpResponseMessage ModifyBalanceSheet()
+        {
+            int result = -1;
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", result.ToString());
+
+                return response;
+            }
+        }
+
+    }
+}

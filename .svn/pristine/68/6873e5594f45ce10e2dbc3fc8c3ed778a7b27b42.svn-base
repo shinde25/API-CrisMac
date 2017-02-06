@@ -1,0 +1,109 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Models.Repository.LoginRepository
+{
+    class LoginRepository : ILoginRepository
+    {
+        LoginModel loginModel = new LoginModel();
+        public string InsertUserLoginHistory(string jsonData)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            loginModel = serializer.Deserialize<LoginModel>(jsonData);
+            string Rval = loginModel.Insert_UserLoginHistory();
+            return Rval;
+        }
+
+        public List<object> SelectLastLoginDetails(string paramString)
+        {
+            JObject Jdata = JObject.Parse(paramString);
+            loginModel.userName = Jdata["userName"].ToString();
+            loginModel.Select_LastLoginDetails();
+            DataSet LoginDetails = loginModel.ResultDataSet;
+            var LoginDetailsTbl1 = LoginDetails.Tables[0].AsEnumerable().Select(x => new
+            {                             
+                LoginTimeDB = x.Field<string>("LoginTimeDB")
+            }).ToList();
+            List<object> lst = new List<object>();
+            lst.Add(LoginDetailsTbl1);
+            return lst;
+        }
+
+        public List<object> SelectLoginDetails(string paramString)
+        {
+            JObject JData = JObject.Parse(paramString);
+            loginModel.userName = JData["userName"].ToString();
+            loginModel.Password = JData["Password"].ToString();
+            loginModel.Select_LoginDetails();
+            DataSet LoginDetails = loginModel.ResultDataSet;
+
+            var LoginDetailsTbl1 = LoginDetails.Tables[0].AsEnumerable().Select(x => new
+            {
+                UserLoginID = x.Field<string>("UserLoginID"),
+                UserName = x.Field<string>("UserName"),
+                LoginPassword = x.Field<string>("LoginPassword"),
+                UserLocation = x.Field<string>("UserLocation"),
+                UserLocationName = x.Field<string>("UserLocationName"),
+                UserLocationCode = x.Field<string>("UserLocationCode"),
+                UserRoleALT_Key = x.Field<Int16>("UserRoleALT_Key"),
+                UserRole_Key = x.Field<Int16>("UserRole_Key"),
+                PasswordChanged = x.Field<string>("PasswordChanged"),
+                Activate = x.Field<string>("Activate"),
+                SUSPEND = x.Field<string>("SUSPEND"),
+                ExpiredUser = x.Field<string>("ExpiredUser"),
+                ExpiredUserDay = x.Field<Int16>("ExpiredUserDay"),
+                MaxUserLogin = x.Field<Int16>("MaxUserLogin"),
+                UserLoginCount = x.Field<Int16>("UserLoginCount"),
+                RoleDescription = x.Field<string>("RoleDescription"),
+                MIS_APP_USR_ID = x.Field<string>("MIS_APP_USR_ID"),
+                MIS_APP_USR_PASS = x.Field<string>("MIS_APP_USR_PASS"),
+                AllowLogin = x.Field<string>("AllowLogin")
+            }).ToList();
+
+            var LoginDetailsTbl2 = LoginDetails.Tables[1].AsEnumerable().Select(x => new
+            {
+
+                ParameterName = x.Field<string>("ParameterName"),
+                ParameterValue = x.Field<string>("ParameterValue")
+
+            }).ToList();
+            var LoginDetailsTbl3 = LoginDetails.Tables[2].AsEnumerable().Select(x => new
+            {
+                ParameterValue = x.Field<int>("ParameterValue")
+
+            }).ToList();
+
+            List<object> lst = new List<object>();
+            lst.Add(LoginDetailsTbl1);
+            lst.Add(LoginDetailsTbl2);
+            lst.Add(LoginDetailsTbl3);
+
+            return lst;
+        }
+
+        public List<object> SelectSysCurrentTimeKey()
+        {
+            loginModel.Select_SysCurrentTimeKey();
+            DataSet LoginDetails = loginModel.ResultDataSet;
+            var LoginDetailsTbl1 = LoginDetails.Tables[0].AsEnumerable().Select(x => new
+            {
+             
+                TimeKey = x.Field<Int16>("TimeKey"),             
+                EffectiveFromTimeKey = x.Field<Int16>("EffectiveFromTimeKey"),
+                EffectiveToTimeKey = x.Field<string>("EffectiveToTimeKey")               
+            }).ToList();
+            List<object> lst = new List<object>();
+            lst.Add(LoginDetailsTbl1);
+            return lst;
+        }
+
+
+    }
+
+}

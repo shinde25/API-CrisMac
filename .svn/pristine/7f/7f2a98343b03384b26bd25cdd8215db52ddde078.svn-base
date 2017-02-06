@@ -1,0 +1,380 @@
+
+using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Areas.UPGRADATION.Models
+{
+    public class AxisUpgradationModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public int RemarkId { get; set; }
+        public string Remark { get; set; }
+        public int CustomerEntityId { get; set; }
+        public int AccountEntityId { get; set; }
+        public int RemarkByAlt_Key { get; set; }
+        public int RemarkTypeAlt_Key { get; set; }
+        public string RemarkDt { get; set; }
+        public string RemarkText { get; set; }
+        public string RemarkBy { get; set; }
+        public int ActionableVerbAlt_Key { get; set; }
+        public string WhatIsToBeDone { get; set; }
+        public string BywhenDt { get; set; }
+        public string ActionableWordJson { get; set; }
+        public int AuditorAlt_Key { get; set; }
+        public string XmlData { get; set; }
+
+        public char Upg_Proc { get; set; }
+        public int UpgrdAuthDays { get; set; }
+
+        
+        public decimal FromBalance { get; set; }
+        public int Page { get; set; }
+        public decimal ToBalance { get; set; }
+        public string UserLoginID { get; set; }
+        public string SystemAcId { get; set; }
+        public string CustomerAcId { get; set; }
+        public int  Ac_Key { get; set; }
+        public string CustomerId { get; set; }
+        public string EffectChangeFromDate { get; set; }
+        public string AddEdit { get; set; }
+
+
+        public DataSet TldlRepaySchSelect()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                   new SqlParameter("@CustomerAcId",CustomerAcId),
+            //                                   new SqlParameter("@TimeKey",_TimeKey)
+            //                                  };
+            //spName = "[UPGRD].[TLDL_RepaySchSelect_View]";
+            //ExecuteSelectDataSet();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_TLDL_RepaySchSelect_View");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "CustomerAcId", System.Data.DbType.String, CustomerAcId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);           
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+        }
+
+        
+        public DataSet BillDetailSelect()          //----------------------- BillDetailSelect
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                    new SqlParameter("@CustomerAcId",CustomerAcId),
+            //                                    new SqlParameter("@TimeKey",_TimeKey)
+            //                                  };
+            //spName = "[UPGRD].[BillDetailSelect_View]";
+            //ExecuteSelectDataSet();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_BillDetailSelect_View");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "CustomerAcId", System.Data.DbType.String, CustomerAcId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+
+
+        }
+
+
+        public DataSet CcodDetailSelect()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                    new SqlParameter("@CustomerAcId",CustomerAcId),
+            //                                    new SqlParameter("@TimeKey",_TimeKey)
+            //                                  };
+            //spName = "[UPGRD].[CCOD_DetailSelect_View]";
+            //ExecuteSelectDataSet();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_CCOD_DetailSelect_View");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "CustomerAcId", System.Data.DbType.String, CustomerAcId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+
+        }
+
+
+        public DataSet UpgradationParameterSelect()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                    new SqlParameter("@TimeKey",_TimeKey),
+            //                                    new SqlParameter("@Mode",_OperationMode)
+            //                                };
+            //spName = "[UPGRD].[UpgradationParameterSelect]";
+            //ExecuteSelectDataSet();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_UpgradationParameterSelect");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "Mode", System.Data.DbType.Int32, _OperationMode);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+        }
+
+        public object UpgradationParameterInsertUpdate()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[UPGRD].[UpgradationParameterInsertUpdate]");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@EffectChangeFromDate", System.Data.DbType.String, EffectChangeFromDate);
+                    database.AddInParameter(command, "@AddEdit", System.Data.DbType.String, AddEdit);
+                    database.AddInParameter(command, "@XmlData", System.Data.DbType.String, XmlData);
+
+                    database.AddInParameter(command, "@Remark", System.Data.DbType.String, _Remark);
+                    database.AddInParameter(command, "@MenuID", System.Data.DbType.Int32, _MenuID);
+                    database.AddInParameter(command, "@BranchCode", System.Data.DbType.Int32, 0);
+                    database.AddInParameter(command, "@OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddInParameter(command, "@AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "@EffectiveFromTimeKey", System.Data.DbType.Int16, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "@EffectiveToTimeKey", System.Data.DbType.Int16, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "@CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+
+                    database.AddOutParameter(command, "@D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.AddOutParameter(command, "@Result", System.Data.DbType.Int32, -1);
+
+                    //database.AddInParameter(command, "ChangedFields", System.Data.DbType.String, _EffectiveToTimeKey);
+                    //database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            JObject DBReturnResult = new JObject();
+
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+
+            //DBReturnResult = new
+            //{
+            //    Result = (command.Parameters)[command.Parameters.Count - 1].Value,
+            //    D2Ktimestamp = (command.Parameters)[command.Parameters.Count - 2].Value
+            //};
+
+            return DBReturnResult;
+        }
+
+        public DataSet MarkUpgradationcycleSelect()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                    new SqlParameter("@TimeKey",_TimeKey),
+            //                                    new SqlParameter("@Mode",_OperationMode)
+            //                                };
+            //spName = "[UPGRD].[MarkUpgradationCycleSelect]";
+            //ExecuteSelectDataSet();
+
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_MarkUpgradationCycleSelect");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "Mode", System.Data.DbType.Int32, _OperationMode);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+
+        }
+
+        public object MarkUpgradationcycleInsertUpdate()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[UPGRD].[MarkCycleDatesInsertUpdate]");
+            try
+            {
+                using (command)
+                {
+                    //database.AddInParameter(command, "@RemarkId", System.Data.DbType.Int32, RemarkId);
+                    //database.AddInParameter(command, "@Upg_Proc", System.Data.DbType.Int32, Upg_Proc);
+                    //database.AddInParameter(command, "@UpgrdAuthDays", System.Data.DbType.Int32, UpgrdAuthDays);
+                 
+                    database.AddInParameter(command, "@XmlData", System.Data.DbType.String, XmlData);
+                    database.AddInParameter(command, "@Remark", System.Data.DbType.String, _Remark);
+                    database.AddInParameter(command, "MenuID", System.Data.DbType.Int32, _MenuID);
+                   
+                    database.AddInParameter(command, "OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddInParameter(command, "AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "EffectiveFromTimeKey", System.Data.DbType.Int16, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "EffectiveToTimeKey", System.Data.DbType.Int16, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+                    database.AddOutParameter(command, "D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+
+            return DBReturnResult;
+        }
+
+
+        #region Updrade Approval Auth
+        public DataSet UpgradeAuth_Select()          
+        {
+            // sqlParams = new SqlParameter[] {
+            //                                     new SqlParameter("@TimeKey",_TimeKey),
+            //                                     new SqlParameter("@AuthMode",_OperationMode),
+            //                                     new SqlParameter("@UserLoginID",_userLoginId),
+            //                                     new SqlParameter("@FromBalance",FromBalance),
+            //                                     new SqlParameter("@ToBalance",ToBalance),
+            //                                     new SqlParameter("@PageNo",Page)
+            //                                   };
+
+            //spName = "[UPGRD].[UpgradeApprovalAuthrSelect]";
+            // ExecuteSelectDataSet();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("UPGRD_UpgradeApprovalAuthrSelect");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "AuthMode", System.Data.DbType.Int32, _OperationMode);
+                    database.AddInParameter(command, "UserLoginID", System.Data.DbType.String, _userLoginId);
+                    database.AddInParameter(command, "FromBalance", System.Data.DbType.Decimal, FromBalance);
+                    database.AddInParameter(command, "ToBalance", System.Data.DbType.Decimal, ToBalance);
+                    database.AddInParameter(command, "PageNo", System.Data.DbType.Int32, Page);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+
+
+
+        }
+
+        public object UpgradeAuth_InsertUpdate()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[UPGRD].[UpgradeApprovalAuthInsertUpdate]");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@XmlData", System.Data.DbType.String, XmlData);
+                    database.AddInParameter(command, "@Remark", System.Data.DbType.String, _Remark);
+                    database.AddInParameter(command, "@MenuID", System.Data.DbType.Int32, _MenuID);
+                    database.AddInParameter(command, "@OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddInParameter(command, "@AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "@EffectiveFromTimeKey", System.Data.DbType.Int16, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "@EffectiveToTimeKey", System.Data.DbType.Int16, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "@CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+                    database.AddOutParameter(command, "@D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.AddOutParameter(command, "@Result", System.Data.DbType.Int32, -1);
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+
+            return DBReturnResult;
+        }
+
+        #endregion  Updrade Approval Auth
+    }
+}

@@ -1,0 +1,192 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Models.Repository.AttributeRepository
+{
+    public class AttributeRepository : IAttributeRepository
+    {
+        public List<object> GetAuxdata(string paramData)
+        {
+            AttributeModel AttAux = new AttributeModel();
+
+            JObject jsonData = JObject.Parse(paramData);
+            AttAux._OperationMode = Convert.ToInt32(jsonData["_OperationMode"].ToString());
+            AttAux._TimeKey = Convert.ToInt32(jsonData["_TimeKey"].ToString());
+            AttAux._AuthMode = jsonData["_AuthMode"].ToString();
+            AttAux.ParamType = Convert.ToString(jsonData["ParamType"].ToString());
+            AttAux.EWS_SegmentAlt_Key= Convert.ToInt32(jsonData["EWS_SegmentAlt_Key"].ToString());
+            AttAux.EWS_ParameterAlt_Key = Convert.ToInt32(jsonData["EWS_ParameterAlt_Key"].ToString());
+
+            AttAux.EWSAttributesAuxSelect();
+            DataSet _AttributesAuxDS = AttAux.ResultDataSet;
+            List<object> AttributesAux = new List<object>();
+            try
+            {
+                var _AttributesAux = _AttributesAuxDS.Tables[0].AsEnumerable().Select(x =>
+               new
+               {
+                   SubParameterName = x.Field<string>("SubParameterName"),
+                   ParameterName = x.Field<string>("ParameterName"),
+                   SubParameterAlt_Key = x.Field<Int16>("SubParameterAlt_Key"),
+                   ParameterAlt_Key = x.Field<Int16>("ParameterAlt_Key"),
+                   ScoringPattern = x.Field<string>("ScoringPattern"),
+                   SupParameterMaxScore = x.Field<Int16>("SupParameterMaxScore"),
+                   SegmentName = x.Field<string>("SegmentName"),
+                   IsRange = x.Field<string>("IsRange"),
+                   Suffix = x.Field<string>("Suffix"),
+                   PreFix = x.Field<string>("PreFix"),
+                   IsParameterLinkedToSMA = x.Field<string>("IsParameterLinkedToSMA"),
+                   AttributesNature = x.Field<string>("AttributesNature"),
+                   EWS_SegmentAlt_Key = x.Field<Int16>("EWS_SegmentAlt_Key")
+                   //, AttId = x.Field<Int16>("id")
+               }).ToList();
+               var  _AttributesList = ((IEnumerable<dynamic>)_AttributesAux).ToList();
+
+                return _AttributesList;
+            }
+            catch(Exception ex)
+            {
+
+            }
+            //var _AttributesAux = _AttributesAuxDS.Tables[0].AsEnumerable().Select(x =>
+            //    new
+            //    {
+            //        SubParameterName = x.Field<string>("SubParameterName"),
+            //        ParameterName = x.Field<string>("ParameterName"),
+            //        SubParameterAlt_Key = x.Field<Int16>("SubParameterAlt_Key"),
+            //        ParameterAlt_Key = x.Field<Int16>("ParameterAlt_Key"),
+            //        ScoringPattern = x.Field<string>("ScoringPattern"),
+            //        SupParameterMaxScore = x.Field<Int16>("SupParameterMaxScore"),
+            //        SegmentName = x.Field<string>("SegmentName"),
+            //        IsRange = x.Field<string>("IsRange"),
+            //        Suffix = x.Field<string>("Suffix"),
+            //        PreFix = x.Field<string>("PreFix"),
+            //        IsParameterLinkedToSMA = x.Field<string>("IsParameterLinkedToSMA"),
+            //        AttributesNature = x.Field<string>("AttributesNature")
+            //        //, AttId = x.Field<Int16>("id")
+            //    }).ToList();
+            //var _AttributesList = ((IEnumerable<dynamic>)_AttributesAux).ToList();
+
+            return AttributesAux;
+        }
+        public List<object> GetMetaData()
+        {
+            char blnParaAtt = 'Y';
+            AttributeModel AttObj = new AttributeModel();
+            AttObj.EWSAttributesParameterised(blnParaAtt);
+
+            DataSet _AttributesDS = AttObj.ResultDataSet;
+            var _Attributes = _AttributesDS.Tables[0].AsEnumerable().Select(x =>
+               new
+               {
+                   FrmName = x.Field<string>("FrmName"),
+                   CtrlName = x.Field<string>("CtrlName"),
+                   FldCaption = x.Field<string>("FldCaption"),
+                   FldDataType = x.Field<string>("FldDataType"),
+                   MinLength = x.Field<Int16>("MinLength"),
+                   MaxLength = x.Field<Int16>("MaxLength"),
+                   FldGrdWidth = x.Field<Int16>("FldGrdWidth"),
+                   FldSearch = x.Field<string>("FldSearch"),
+                   ErrorCheck = x.Field<string>("ErrorCheck"),
+                   DataSeq = x.Field<Int16>("DataSeq"),
+                   FldGridView = x.Field<string>("FldGridView"),
+                   CriticalErrorType = x.Field<string>("CriticalErrorType"),
+                   MsgFlag = x.Field<string>("MsgFlag"),
+                   MsgDescription = x.Field<string>("MsgDescription"),
+                   ScreenFieldNo = x.Field<int>("ScreenFieldNo"),
+                   ViableForSCD2 = x.Field<string>("ViableForSCD2"),
+                   Editable = x.Field<string>("Editable"),
+                   Hide = x.Field<string>("Hide"),
+                   AllowToolTip = x.Field<string>("AllowToolTip"),
+                   ReferenceColumnName = x.Field<string>("ReferenceColumnName"),
+                   ReferenceTableName = x.Field<string>("ReferenceTableName"),
+                   IsAmount = x.Field<string>("IsAmount"),
+                   MOC_Flag = x.Field<string>("MOC_Flag")
+
+               }).ToList();
+            var AttributesList = ((IEnumerable<dynamic>)_Attributes).ToList();
+
+            return AttributesList;
+        }
+        public List<object> FetchData(string paramData)
+        {
+            List<object> _AttributesListObj = new List<object>();
+            AttributeModel AttObj = new AttributeModel();
+            JObject jsonData = JObject.Parse(paramData);
+
+            AttObj.SubParameterAlt_Key = Convert.ToInt32(jsonData["SubParameterAlt_Key"].ToString());
+            AttObj.ParameterAlt_Key = Convert.ToInt32(jsonData["ParameterAlt_Key"].ToString());
+            AttObj.EWS_SegmentAlt_Key = Convert.ToInt32(jsonData["EWS_SegmentAlt_Key"].ToString());
+            AttObj._TimeKey = Convert.ToInt32(jsonData["_TimeKey"].ToString());
+            AttObj._OperationMode = Convert.ToInt32(jsonData["_OperationFlag"].ToString());
+            AttObj._AuthMode = jsonData["_AuthMode"].ToString();
+            AttObj.EWSAttributesSelect();
+            DataSet _AttributesDS = AttObj.ResultDataSet;
+            // Execute the query and get the ObjectResult.     
+            var _Attributes = _AttributesDS.Tables[0].AsEnumerable().Select(x =>
+               new
+               {
+                   SubParameterName = x.Field<string>("SubParameterName"),
+                   ParameterName = x.Field<string>("ParameterName"),
+                   EWS_Attributes_Key = x.Field<Int16>("EWS_Attributes_Key"),
+                   EWS_AttributesAlt_Key = x.Field<Int16>("EWS_AttributesAlt_Key"),
+                   AttributesName = x.Field<string>("AttributesName"),
+                   Min = x.Field<Int16>("Min"),
+                   Max = x.Field<Int16>("Max"),
+                   AttributesScore = x.Field<Int16>("AttributesScore"),
+                   SubParameterAlt_Key = x.Field<Int16>("SubParameterAlt_Key"),
+                   ParameterAlt_Key = x.Field<Int16>("ParameterAlt_Key"),
+                   AttId = x.Field<Int16>("id"),
+                   IsMainTable = x.Field<string>("IsMainTable"),
+                   CreatedModifiedBy = x.Field<string>("CreatedModifiedBy"),
+                   AuthorisationStatus = x.Field<string>("AuthorisationStatus"),
+                   EWS_SegmentAlt_Key = x.Field<Int16>("EWS_SegmentAlt_Key")
+
+               }).ToList();
+
+            _AttributesListObj.Add(_Attributes);
+            if (_Attributes.Count > 0)
+            {
+                var CreatedModifiedBy = _Attributes[0].CreatedModifiedBy;
+                var IsMainTable = _Attributes[0].IsMainTable;
+                var AuthorisationStatus = _Attributes[0].AuthorisationStatus;
+                var listValidations = new { CreatedModifiedBy = CreatedModifiedBy, IsMainTable = IsMainTable, AuthorisationStatus = AuthorisationStatus };
+                
+                _AttributesListObj.Add(listValidations);
+            }
+
+            var _AttributesList = ((IEnumerable<dynamic>)_AttributesListObj).ToList();
+
+            return _AttributesList;
+        }
+        public int InsertUpdateData(string jsonData)
+        {
+            int rval = -1;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            AttributeModel jSonAttributeModel = serializer.Deserialize<AttributeModel>(jsonData);
+            //_Attributes = _Attributes.Replace("[", "");
+            //_Attributes = _Attributes.Replace("]", "");
+            //JObject json = JObject.Parse(_Attributes);
+
+            //string _AttributesXML = doc.InnerXml;
+            rval= jSonAttributeModel.EWSAttributesInsertUpdate();
+
+            return rval;
+
+        }
+
+        public List<object> GetSegmentParameterFetch(string ParaStr)
+        {
+            AttributeModel AttAux = new AttributeModel();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            AttAux = serializer.Deserialize<AttributeModel>(ParaStr);
+            AttAux.SegmentParameterAuxSelect();        // call to model's function
+            DataSet __SubParameterMatrixAuxDS = AttAux.ResultDataSet;
+            return __SubParameterMatrixAuxDS.ToList();
+        }
+    }
+}

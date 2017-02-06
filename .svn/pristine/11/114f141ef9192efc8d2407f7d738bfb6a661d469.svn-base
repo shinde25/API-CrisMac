@@ -1,0 +1,171 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using CrisMAcAPI.Models.Repository.CommonInterface;
+using CrisMAcAPI.Models.Repository.DocumentUploadRepository;
+
+
+namespace CrisMAcAPI.Models.Repository.DocumentUploadRepository
+{
+    public class DocumentUploadRepository : IDocumentUploadRepository
+    {
+        DocumentUploadModel _DocumentUploadModel;
+        DataSet _DataSet;
+        JavaScriptSerializer serializer;
+
+
+        //      Parmatrised     //
+        #region Parmatrised
+        public List<object> GetMetaData(string ParaStr)
+        {
+            _DocumentUploadModel = new DocumentUploadModel();
+            serializer = new JavaScriptSerializer();
+            JObject job = JObject.Parse(ParaStr);
+            _DocumentUploadModel._TimeKey = Convert.ToInt32(job["_TimeKey"].ToString());
+
+            _DataSet = new DataSet();
+            _DocumentUploadModel.DocumentUploadParmatrised();   // call to model's function
+            _DataSet = _DocumentUploadModel.ResultDataSet;
+
+            return _DataSet.ToList();
+        }
+        #endregion
+
+
+        //      AUX     //
+        #region AUX
+        public List<object> GetAuxdata(string paramString)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            _DocumentUploadModel = new DocumentUploadModel();
+            _DocumentUploadModel = serializer.Deserialize<DocumentUploadModel>(paramString);
+            _DocumentUploadModel.DocumentUploadAuxSelect();         // call to model's function
+            DataSet _DocumentUploadAuxDS = _DocumentUploadModel.ResultDataSet;
+            List<object> LstObj = new List<object>();          
+            return _DocumentUploadAuxDS.ToList();
+        }
+        #endregion
+
+
+
+        //      FETCH       //
+        #region FETCH
+        public List<object> FetchData(string paramString)
+        {
+            _DocumentUploadModel = new DocumentUploadModel();
+            serializer = new JavaScriptSerializer();
+            _DocumentUploadModel = serializer.Deserialize<DocumentUploadModel>(paramString);
+
+            _DataSet = new DataSet();
+            _DocumentUploadModel.DocumentUploadSelect(); // call to model's function
+            _DataSet = _DocumentUploadModel.ResultDataSet;
+           
+            return _DataSet.ToList();
+        }
+        #endregion
+
+        //Get Uploaded File From DB SP
+        public List<object> DocumentUploadedFileSelect(string paramString)
+        {
+            _DocumentUploadModel = new DocumentUploadModel();
+            serializer = new JavaScriptSerializer();
+            _DocumentUploadModel = serializer.Deserialize<DocumentUploadModel>(paramString);
+
+            _DataSet = new DataSet();
+            _DocumentUploadModel.DocumentUploadedFileSelect(); // call to model's function
+            _DataSet = _DocumentUploadModel.ResultDataSet;
+            List<object> LstObj = new List<object>();
+
+            JObject JDocData = new JObject();
+            JDocData.Add("DocName", _DataSet.Tables[0].Rows[0]["DocName"].ToString());
+            JDocData.Add("FileType", _DataSet.Tables[0].Rows[0]["FileType"].ToString());
+            JDocData.Add("DocData", (byte[])_DataSet.Tables[0].Rows[0]["DocData"]);
+            LstObj.Add(JDocData);          
+
+            return LstObj;
+        }
+
+        //      INSERT UPDATE       //
+        #region INSERT UPDATE
+        public object InsertUpdateData(string jsonData)
+        {
+            object rval = null;
+            _DocumentUploadModel = new DocumentUploadModel();
+            //serializer = new JavaScriptSerializer();
+            //_DocumentUploadModel = serializer.Deserialize<DocumentUploadModel>(jsonData);
+            JObject job = JObject.Parse(jsonData);
+            string data = job["DocData"].ToString();
+            _DocumentUploadModel.CustomerEntityId = Convert.ToInt32(job["CustomerEntityId"].ToString());
+            _DocumentUploadModel.DocDate = Convert.ToString(job["DocDate"].ToString());
+            _DocumentUploadModel.DocumentTypeAlt_Key = Convert.ToInt32(job["DocumentTypeAlt_Key"].ToString());
+            _DocumentUploadModel.DocName = Convert.ToString(job["DocName"].ToString());
+            _DocumentUploadModel.FileType = Convert.ToString(job["FileType"].ToString());
+            _DocumentUploadModel.DocumentID = Convert.ToInt32(job["DocumentID"].ToString());
+            //_DocumentUploadModel.DocData = Encoding.ASCII.GetBytes(job["DocData"].ToString());
+            if (data != "")
+            {
+                _DocumentUploadModel.DocData = (byte[])job["DocData"];
+            }
+            else
+            {
+                _DocumentUploadModel.DocData = Encoding.ASCII.GetBytes(job["DocData"].ToString());
+            }           
+            _DocumentUploadModel._MenuID = Convert.ToInt32(job["_MenuID"].ToString());
+            _DocumentUploadModel._BranchCode = Convert.ToString(job["_BranchCode"].ToString());
+            _DocumentUploadModel._dateCreatedmodified = Convert.ToDateTime(job["_dateCreatedmodified"].ToString());
+            _DocumentUploadModel._CreatetedModifiedBy = Convert.ToString(job["_CreatetedModifiedBy"].ToString());
+            _DocumentUploadModel._OperationFlag = Convert.ToInt32(job["_OperationFlag"].ToString());
+            _DocumentUploadModel._AuthMode = Convert.ToString(job["_AuthMode"].ToString());
+            _DocumentUploadModel._TimeKey = Convert.ToInt32(job["_TimeKey"].ToString());
+            _DocumentUploadModel._EffectiveFromTimeKey = Convert.ToInt32(job["_EffectiveFromTimeKey"].ToString());
+            _DocumentUploadModel._EffectiveToTimeKey = Convert.ToInt32(job["_EffectiveToTimeKey"].ToString());
+            rval = _DocumentUploadModel.DocumentUploadInsertUpdate();  // call to model's function
+            return rval;
+        }
+        public object InsertUpdateData_images(string jsonData)
+        {
+            object rval = null;          
+            JObject job = JObject.Parse(jsonData);
+            _DocumentUploadModel = new DocumentUploadModel();
+            _DocumentUploadModel.DocumentID = Convert.ToInt32(job["DocumentID"].ToString());
+            _DocumentUploadModel.PageNo = Convert.ToInt32(job["PageNo"].ToString());
+            _DocumentUploadModel.ImgData = (byte[])job["ImgData"]; 
+            _DocumentUploadModel.ImgType     = Convert.ToString(job["ImgType"].ToString());           
+           
+            _DocumentUploadModel._MenuID = Convert.ToInt32(job["_MenuID"].ToString());
+            _DocumentUploadModel._BranchCode = Convert.ToString(job["_BranchCode"].ToString());
+            _DocumentUploadModel._dateCreatedmodified = Convert.ToDateTime(job["_dateCreatedmodified"].ToString());
+            _DocumentUploadModel._CreatetedModifiedBy = Convert.ToString(job["_CreatetedModifiedBy"].ToString());
+            _DocumentUploadModel._OperationFlag = Convert.ToInt32(job["_OperationFlag"].ToString());
+            _DocumentUploadModel._AuthMode = Convert.ToString(job["_AuthMode"].ToString());
+            _DocumentUploadModel._TimeKey = Convert.ToInt32(job["_TimeKey"].ToString());
+            _DocumentUploadModel._EffectiveFromTimeKey = Convert.ToInt32(job["_EffectiveFromTimeKey"].ToString());
+            _DocumentUploadModel._EffectiveToTimeKey = Convert.ToInt32(job["_EffectiveToTimeKey"].ToString());
+            rval = _DocumentUploadModel.DocumentUploadInsertUpdate_Images();  // call to model's function
+            return rval;
+        }
+        #endregion
+
+
+
+        // implemented by ctrl+.
+        #region ctrl+.
+        public List<object> GetMetaData()
+        {
+            throw new NotImplementedException();
+        }
+
+        int ICommonInterface.InsertUpdateData(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
+    }
+}

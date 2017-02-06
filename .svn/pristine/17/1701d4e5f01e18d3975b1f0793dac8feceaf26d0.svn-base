@@ -1,0 +1,122 @@
+﻿using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Data;
+using System.Data.Common;
+
+namespace CrisMAcAPI.Areas.LOS.Models
+{
+    public class CustomerModel
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string MasterName { get; set; }
+        public string SearchString { get; set; }
+
+        public string LiveLocation { get; set; }
+        public string Gender { get; set; }
+        public string PropertyLocation { get; set; }
+        public string LoanType { get; set; }
+        public string UseOfLoan { get; set; }
+        public string LoanAmount { get; set; }
+        public string EmploymentType { get; set; }
+        public string CompanyName { get; set; }
+        public string JoiningDate { get; set; }
+        public string WorkExperience { get; set; }
+        public string GrossSalary { get; set; }
+        public string AnnualBonus { get; set; }
+        public string ProfitExcludingTax { get; set; }
+        public string MonthlyIncome { get; set; }
+        public string DateofBirth { get; set; }
+        public string CoApplicant { get; set; }
+        public string Relation { get; set; }
+        public string OwnershipDivided { get; set; }
+        public string CoApplicantCity { get; set; }
+        public string CoApplicantEmploymentType { get; set; }
+        public string CoApplicantCompanyName { get; set; }
+        public string CoApplicantJoiningDate { get; set; }
+        public string CoApplicantWorkExperience { get; set; }
+        public string CoApplicantGrossSalary { get; set; }
+        public string CoApplicantMonthlyIncome { get; set; }
+        public string CoApplicantAnnualBonus { get; set; }
+        public string CoApplicantDateofBirth { get; set; }
+        public string Name { get; set; }
+        public string MobileNo { get; set; }
+        public string EmailID { get; set; }
+        public string CreatedDate { get; set; }
+        public string Source { get; set; }
+        public int Result { get; set; }
+
+        public DataSet GetMasterData()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("GetMasterData");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "MasterName", System.Data.DbType.String, MasterName);
+                    database.AddInParameter(command, "SearchString", System.Data.DbType.String, SearchString);
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+        }
+
+        public JObject InsertQECApplication()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("QECApplicationInsert");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "LiveLocation", System.Data.DbType.String, LiveLocation);
+                    database.AddInParameter(command, "Gender", System.Data.DbType.String, Gender);
+                    database.AddInParameter(command, "PropertyLocation", System.Data.DbType.String, PropertyLocation);
+                    database.AddInParameter(command, "LoanType", System.Data.DbType.String, LoanType);
+                    database.AddInParameter(command, "UseOfLoan", System.Data.DbType.String, UseOfLoan);
+                    database.AddInParameter(command, "LoanAmount", System.Data.DbType.String, LoanAmount);
+                    database.AddInParameter(command, "EmploymentType", System.Data.DbType.String, EmploymentType);
+                    database.AddInParameter(command, "CompanyName", System.Data.DbType.String, CompanyName);
+                    database.AddInParameter(command, "JoiningDate", System.Data.DbType.String,JoiningDate);
+                    database.AddInParameter(command, "WorkExperience", System.Data.DbType.String, WorkExperience);
+                    database.AddInParameter(command, "GrossSalary", System.Data.DbType.String, GrossSalary);
+                    database.AddInParameter(command, "AnnualBonus", System.Data.DbType.String, AnnualBonus);
+                    database.AddInParameter(command, "ProfitExcludingTax", System.Data.DbType.String, ProfitExcludingTax);
+                    database.AddInParameter(command, "MonthlyIncome", System.Data.DbType.String, MonthlyIncome);
+                    database.AddInParameter(command, "DateofBirth", System.Data.DbType.String, DateofBirth);
+                    database.AddInParameter(command, "CoApplicant", System.Data.DbType.String, CoApplicant);
+                    database.AddInParameter(command, "Relation", System.Data.DbType.String, Relation);
+                    database.AddInParameter(command, "OwnershipDivided", System.Data.DbType.String, OwnershipDivided);
+                    database.AddInParameter(command, "CoApplicantCity", System.Data.DbType.String, CoApplicantCity);
+                    database.AddInParameter(command, "CoApplicantEmploymentType", System.Data.DbType.String, CoApplicantEmploymentType);
+                    database.AddInParameter(command, "CoApplicantCompanyName", System.Data.DbType.String, CoApplicantCompanyName);
+                    database.AddInParameter(command, "CoApplicantJoiningDate", System.Data.DbType.String, CoApplicantJoiningDate);
+                    database.AddInParameter(command, "CoApplicantWorkExperience", System.Data.DbType.String, CoApplicantWorkExperience);
+                    database.AddInParameter(command, "CoApplicantGrossSalary", System.Data.DbType.String, CoApplicantGrossSalary);
+                    database.AddInParameter(command, "CoApplicantMonthlyIncome", System.Data.DbType.String, CoApplicantMonthlyIncome);
+                    database.AddInParameter(command, "CoApplicantAnnualBonus", System.Data.DbType.String, CoApplicantAnnualBonus);
+                    database.AddInParameter(command, "CoApplicantDateofBirth", System.Data.DbType.String, CoApplicantDateofBirth);
+                    database.AddInParameter(command, "Name", System.Data.DbType.String, Name);
+                    database.AddInParameter(command, "MobileNo", System.Data.DbType.String, MobileNo);
+                    database.AddInParameter(command, "EmailID", System.Data.DbType.String, EmailID);
+                    database.AddInParameter(command, "CreatedDate", System.Data.DbType.DateTime, CreatedDate);
+                    database.AddInParameter(command, "Source", System.Data.DbType.String, Source);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.String, Result);
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+            return DBReturnResult;
+        }
+    }
+}

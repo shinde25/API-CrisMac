@@ -1,0 +1,37 @@
+﻿using Microsoft.Practices.EnterpriseLibrary.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Areas.LOS.Models
+{
+    public class CustomerModel
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string masterFetchrecord { get; set; }
+
+        public DataSet GetMasterData()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("CreditScoreInfoParaMasterDataNew");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "blnFetchrecord", System.Data.DbType.String, masterFetchrecord);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+﻿using CrisMAc.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data.SqlClient;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using System.Data.Common;
+using System.Data;
+
+namespace CrisMAcAPI.Models
+{
+    public class AlertMessageDisplayModel: CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string UserId { get; set; }
+        
+        public string SearchString { get; set; }
+
+
+        public DataSet Get_AlertMessageList()
+        {
+            
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("AlertMessageDeisplaySelect");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+
+                    database.AddInParameter(command, "Timekey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "UserId", System.Data.DbType.String, UserId);
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+
+        }
+    }
+}

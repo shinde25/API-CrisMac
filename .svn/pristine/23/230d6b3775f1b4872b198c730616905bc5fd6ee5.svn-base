@@ -1,0 +1,96 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.Axis_MOC.Models.Repository.Incorporation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+using System.Web.Mvc;
+
+using System.Net.Http;
+using System.Web.Script.Serialization;
+using System.Net;
+
+namespace CrisMAcAPI.Areas.Axis_MOC.Controllers
+{
+    public class CustAccountMocController : ApiController
+    {
+        ICustAccountMocRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+
+        public CustAccountMocController(ICustAccountMocRepository repository)
+        {
+            this.repository = repository;
+        }
+
+
+        [System.Web.Http.Route("CrisMAc/IncorporationSelect/{param}")]//----------IncorporationSelect
+        [System.Web.Http.HttpGet]
+        public string CustAccountMOCelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetIncorporation(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [System.Web.Http.Route("CrisMAc/AssetClassMeta/{param}")]//----------IncorporationSelect
+        [System.Web.Http.HttpGet]
+        public string ParametriceMeta(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetParametriceMeta(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [System.Web.Http.Route("CrisMAc/CustAccountGridMOC/{param}")]//----------IncorporationSelect
+        [System.Web.Http.HttpGet]
+        public string CustAccountGrid(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetCustAccountGrid(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [System.Web.Http.Route("CrisMAc/CustAccountInsertUpdate")]//----------IncorporationSelect
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage CustAccountInsertUpdate()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.GetCustAccountInsertUpdate(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+
+         
+        }
+
+
+        
+
+    }
+}

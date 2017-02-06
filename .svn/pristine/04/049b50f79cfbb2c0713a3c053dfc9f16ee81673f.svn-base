@@ -1,0 +1,32 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using CrisMAcAPI.Areas.CommonComponent.Models;
+using CrisMAcAPI.Areas.FAM.Models;
+
+namespace CrisMAcAPI.Areas.FAM.Models.Repository.AssetTransferRepository
+{
+    public class AssetTransferRepository : IAssetTransferRepository
+    {
+       
+        AssetTransferModel _AssetTransferModel;
+       JavaScriptSerializer serializer;
+        DataSet _DataSet;
+        public List<object> InsertUpdateData(string jsonData)
+        {
+            _AssetTransferModel = new AssetTransferModel();
+            serializer = new JavaScriptSerializer();
+            _AssetTransferModel = serializer.Deserialize<AssetTransferModel>(jsonData);
+
+            _DataSet = new DataSet();
+            _AssetTransferModel.InsertUpdateData();
+            _DataSet = _AssetTransferModel.ResultDataSet;
+            return _DataSet.ToList();
+        }
+    }
+}

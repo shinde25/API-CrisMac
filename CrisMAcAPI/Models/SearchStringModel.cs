@@ -1,0 +1,111 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Models
+{
+    public class SearchStringModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string Company_Industry { get; set; }
+        public string Company_Industry_Name { get; set; }
+        public string xmlDocument { get; set; }
+        public int CompAltKey { get; set; }
+        public int CustAltKey { get; set; }
+        public int CompanyCode { get; set; }
+        public void SearchStringMeta(char blnYNStr)
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@blnflg", blnYNStr)
+                };
+            spName = "[EWS].[SearchStringParmatrised]";
+            ExecuteSelectDataSet();
+        }
+        
+        public void SearchStringAuxCustDetails()
+        {
+            sqlParams = new SqlParameter[] {
+                new SqlParameter("@BranchCode", _BranchCode),
+                new SqlParameter("@Mode", _OperationMode),
+                new SqlParameter("@TimeKey", _TimeKey)
+                };
+            spName = "[EWS].[SearchStringFetchCustDetails]";
+            ExecuteSelectDataSet();
+        }
+        public void SearchStringAux()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@SearchString", Company_Industry_Name),
+                                                new SqlParameter("@Name", Company_Industry),
+                                                 new SqlParameter("@BranchCode", _BranchCode),
+                                                  new SqlParameter("@Mode", _OperationFlag),
+                                                   new SqlParameter("@TimeKey", _TimeKey)
+
+                };
+            spName = "[EWS].[SearchStringAuxSelect]";
+            ExecuteSelectDataSet();
+        }
+        public void SearchStringFetch()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@CompanyInd_Key", CompanyCode),
+                                               new SqlParameter("@CompanyInd_type", Company_Industry),
+                                               new SqlParameter("@BranchCode", _BranchCode),
+                                               new SqlParameter("@Mode", _OperationFlag),
+                                               new SqlParameter("@TimeKey", _TimeKey)
+
+                };
+            spName = "[EWS].[SearchStringSelect]";
+            ExecuteSelectDataSet();
+        }
+        public object SearchStringSave()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[EWS].[SearchStringInsertUpdate]");
+
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "xmlDocument", System.Data.DbType.String, xmlDocument);
+                    database.AddInParameter(command, "MenuID", System.Data.DbType.Int32, _MenuID);
+                    database.AddInParameter(command, "DATECreateModifyApproved", System.Data.DbType.DateTime, DateTime.Now);
+                    database.AddInParameter(command, "Remark", System.Data.DbType.String, _Remark);
+                    database.AddInParameter(command, "OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddInParameter(command, "AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "EffectiveFromTimeKey", System.Data.DbType.Int32, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "EffectiveToTimeKey", System.Data.DbType.Int32, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+                    database.AddInParameter(command, "CompanyInd_type", System.Data.DbType.String, Company_Industry);
+                    database.AddInParameter(command, "CustomerEntityId", System.Data.DbType.Int32, CustAltKey);
+                    database.AddInParameter(command, "CompanyIndAlt_Key", System.Data.DbType.Int32, CompAltKey);
+                    database.AddOutParameter(command, "D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+            //DBReturnResult = new
+            //{
+            //    Result = (command.Parameters)[command.Parameters.Count - 1].Value,
+            //    D2Ktimestamp = (command.Parameters)[command.Parameters.Count - 2].Value
+            //};
+            return DBReturnResult;
+        }
+
+    }
+}

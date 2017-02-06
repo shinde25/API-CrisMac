@@ -1,0 +1,149 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+
+namespace CrisMAcAPI.Models.Repository.BranchDetailsRepository
+{
+    public class BranchRepository : IBranchRepository
+    {
+        BranchSelection clsBS;
+        public List<object> FetchData(string paramData)
+        {
+            clsBS = new BranchSelection();
+            JObject jsonData = JObject.Parse(paramData);
+
+            clsBS.Condition = Convert.ToString(jsonData["Condition"]);
+            clsBS.Code = Convert.ToString(jsonData["Code"]);
+            clsBS.Top = Convert.ToInt16(jsonData["Top"]);
+            clsBS.Select_SysBRZDataSelect_Moc();
+            DataSet _tempds = clsBS.ResultDataSet;
+            //List<BranchSelection> lstBS = new List<BranchSelection>();
+            var lstBS = _tempds.Tables[0].AsEnumerable().Select(x =>
+             new
+             {
+                 ZoneAltKey = x.Field<short>("ZoneAltKey"),
+                 ZoneName = x.Field<string>("ZoneName"),
+                 RegionAltKey = x.Field<short>("RegionAltKey"),
+                 RegionName = x.Field<string>("RegionName"),
+                 BranchCode = x.Field<string>("BranchCode"),
+                 BranchName = x.Field<string>("BranchName"),
+                 BranchBusinessCategory = x.Field<string>("BranchBusinessCategory"),
+                 BranchCode2 = x.Field<string>("BranchCode2"),
+                 AllowPreDisb = x.Field<string>("AllowPreDisb"),
+                 DistrictAlt_Key = x.Field<short>("DistrictAlt_Key"),
+                 MOCLock = x.Field<string>("MOCLock"),
+                 MnthFreez = x.Field<string>("MnthFreez"),
+                 Mechanize = x.Field<string>("Mechanize"),
+                 DistrictName = x.Field<string>("DistrictName"),
+                 ShowValue = x.Field<string>("ShowValue"),
+                 StateAltKey = x.Field<short>("StateAltKey"),
+                 StateName = x.Field<string>("StateName"),
+                 BranchKey = x.Field<short>("BranchKey"),
+                 AreaAltKey = x.Field<short>("AreaAltKey"),
+                 BranchType = x.Field<string>("BranchType"),
+                 EffectiveFromTimeKey = x.Field<short>("EffectiveFromTimeKey"),
+                 EffectiveToTimeKey = x.Field<Int32>("EffectiveToTimeKey"),
+                 PrevLevelMoc = x.Field<string>("PrevLevelMoc"),
+                 CurrLevelMoc = x.Field<string>("CurrLevelMoc")
+
+             }).ToList();
+           
+
+            //Binding Year
+            var lstYS = _tempds.Tables[1].AsEnumerable().Select(x =>
+                 new
+                 {
+                     Code = x.Field<string>("Code"),
+                     Description = x.Field<string>("Description")
+                 }).ToList();
+
+            //Binding Month
+            var lstMS = _tempds.Tables[2].AsEnumerable().Select(x =>
+             new
+             {
+                 Code = x.Field<string>("Code"),
+                 Description = x.Field<string>("Description"),
+                 Year = x.Field<string>("Year"),
+                 currentstatus = x.Field<string>("currentstatus"),
+                 EffectiveFromTimeKey = x.Field<int>("EffectiveFromTimeKey"),
+                 MonthCaption = x.Field<string>("MonthCaption"),
+                 MonthFirstDate = x.Field<DateTime>("MonthFirstDate"),
+                 MonthLastDate = x.Field<DateTime>("MonthLastDate")
+                 // Timekey = x.Field<short>("Timekey"),
+             }).ToList();
+            //.Where(x => x.Year == lstYS[0].Code)
+            //Binding Date
+            var lstDS = _tempds.Tables[3].AsEnumerable().Select(x =>
+                 new
+                 {
+                     MonthYear = x.Field<string>("MonthYear"),
+                     Code = x.Field<int>("Code"),
+                     Description = x.Field<string>("Description"),
+                     TimeKey = x.Field<int>("TimeKey"),
+                     DataEffectiveToDate = x.Field<DateTime>("DataEffectiveToDate"),
+                     CurrentStatus = x.Field<string>("CurrentStatus"),
+                     Month = x.Field<string>("Month"),
+                     Year = x.Field<string>("Year"),
+                     MonthEndTimeKey = x.Field<int>("MonthEndTimeKey")
+                 }).ToList();
+
+            var lstTV = _tempds.Tables[4].AsEnumerable().Select(x =>
+                new
+                {
+                    ParameterName = x.Field<string>("ParameterName"),
+                    ParameterValue = x.Field<string>("ParameterValue")
+                }).ToList();
+
+         
+            var lstBSZone = _tempds.Tables[0].AsEnumerable().Select(x =>
+               new
+               {
+                   ZoneAltKey = x.Field<Int16>("ZoneAltKey"),
+                   ZoneName = x.Field<string>("ZoneName"),
+                   EffectiveFromTimeKey = x.Field<Int16>("EffectiveFromTimeKey"),
+                   EffectiveToTimeKey = x.Field<Int32>("EffectiveToTimeKey")
+               }).Distinct().ToList();
+
+
+            var lstBSRegion = _tempds.Tables[0].AsEnumerable().Select(x =>
+              new
+              {
+                  RegionAltKey = x.Field<Int16>("RegionAltKey"),
+                  RegionName = x.Field<string>("RegionName"),
+                  EffectiveFromTimeKey = x.Field<Int16>("EffectiveFromTimeKey"),
+                  EffectiveToTimeKey = x.Field<Int32>("EffectiveToTimeKey")
+              }).Distinct().ToList();
+
+
+
+            var lstBSFR = lstBS.FirstOrDefault();
+            List<object> mergeList = new List<object>();
+            mergeList.Add(lstBS);
+            mergeList.Add(lstBSZone);
+            mergeList.Add(lstYS);
+            mergeList.Add(lstMS);
+            mergeList.Add(lstDS);
+            mergeList.Add(lstBSFR);
+            mergeList.Add(lstTV);
+            mergeList.Add(lstBSRegion);
+
+            var listResult = ((IEnumerable<dynamic>)mergeList).ToList();
+            return listResult;
+        }
+        public List<object> GetAuxdata(string paramString)
+        {
+            throw new NotImplementedException();
+        }
+        public List<object> GetMetaData()
+        {
+            throw new NotImplementedException();
+        }
+        public int InsertUpdateData(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+        //public List<object> FetchDefaultBranch(string paramData);
+    }
+}

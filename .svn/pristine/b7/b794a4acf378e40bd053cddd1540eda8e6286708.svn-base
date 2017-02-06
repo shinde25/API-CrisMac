@@ -1,0 +1,26 @@
+﻿using CrisMAcAPI.Areas.CommonComponent.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.IFAM_Premises.Models.Repository.CommonPremiseRepository
+{
+    public class CommonPremiseRepository : ICommonPremiseRepository
+    {
+        PremisePurchaseModel _PUModel;
+        DataSet _DataSet;
+        JavaScriptSerializer serializer;
+        public List<object> GetAssetBlockandSubBlockData(string ParaStr)
+        {
+            _PUModel = new PremisePurchaseModel();
+            serializer = new JavaScriptSerializer();
+            _PUModel = serializer.Deserialize<PremisePurchaseModel>(ParaStr);
+            _DataSet = new DataSet();
+            _DataSet = _PUModel.PremisePurchaseAssetBlockSubBlockParmatrised();
+            return _DataSet.ToList();
+        }
+    }
+}

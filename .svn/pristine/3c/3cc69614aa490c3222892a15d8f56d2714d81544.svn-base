@@ -1,0 +1,61 @@
+﻿using CrisMAc.Models;
+using CrisMAcAPI.Areas.FAM.Models.Repository.AssetTransferRepository;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrisMAcAPI.Areas.FAM.Models
+{
+    public class AssetTransferModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public DateTime PurchaseDate { get; set; }
+        public string TrasnRefNo { get; set; }
+        public string TransMode { get; set; }
+        public string BranchOffice { get; set; }
+        public string EmailID { get; set; }
+        public int MobileNo { get; set; }
+        public string TxnGrossBlock { get; set; }
+        public string TxnDepriciation { get; set; }
+
+        public void InsertUpdateData()
+        {
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("[FAM].[AssetTransferInsertUpdate]");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@PurchaseDate", System.Data.DbType.DateTime, PurchaseDate);
+                    database.AddInParameter(command, "@TrasnRefNo", System.Data.DbType.Int32, TrasnRefNo);
+                    database.AddInParameter(command, "@TransMode", System.Data.DbType.Int64, TransMode);
+                    database.AddInParameter(command, "@BranchOffice", System.Data.DbType.String, BranchOffice);
+                    database.AddInParameter(command, "@EmailID", System.Data.DbType.String, EmailID);
+                    database.AddInParameter(command, "@MobileNo", System.Data.DbType.Int32, MobileNo);
+                    database.AddInParameter(command, "@TxnGrossBlock", System.Data.DbType.String, TxnGrossBlock);
+                    database.AddInParameter(command, "@TxnDepriciation", System.Data.DbType.String, TxnDepriciation);
+                   
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
+          
+        }
+    }
+}

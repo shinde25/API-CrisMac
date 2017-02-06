@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrisMAcAPI.Areas.Axis_MOC.Models.Repository.Incorporation
+{
+    public  interface ICustAccountMocRepository
+    {//GetCustAccountInsertUpdate
+        List<object> GetIncorporation(string paramString);
+        List<object> GetParametriceMeta(string paramString);
+        List<object> GetCustAccountGrid(string paramString);
+
+        object GetCustAccountInsertUpdate(string jsonData);
+
+        List<object> GetCustAccountExcelUpload(string jsonData);
+    }
+}

@@ -1,0 +1,39 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Areas.IFAM_Premises.Models
+{
+    public class CommonPremiseModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+     
+        public DataSet PremisePurchaseAssetBlockSubBlockParmatrised()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("PremisePurchaseParameterisedMasterData");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    //database.AddInParameter(command, "TxtScreen", System.Data.DbType.String, TxtScreen);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return ds;
+            }
+        }
+
+    }
+}

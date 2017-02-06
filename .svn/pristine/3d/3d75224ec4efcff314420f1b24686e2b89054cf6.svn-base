@@ -1,0 +1,42 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrisMAcAPI.Areas.FAM.Models
+{
+    public class AssetTransactionMainModel:CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();     
+
+
+        public void AssetTransactionMainParmatrised()
+        {
+            sqlParams = new SqlParameter[] {
+               new SqlParameter("@TimeKey", _TimeKey)
+                };
+            spName = "[dbo].[AssetTransactionMainParameterisedMasterData]";
+            ExecuteSelectDataSet();
+        }      
+        
+        public void AssetTransactionMainSelect()
+        {
+            sqlParams = new SqlParameter[] {
+
+                                                 new SqlParameter("@_TimeKey",_TimeKey),
+                                                 new SqlParameter("@TimeKey",_TimeKey),
+                                                 new SqlParameter("@Mode", _OperationMode)
+
+
+                };
+            spName = "[dbo].[AssetTransactionMainSearch]";
+            ExecuteSelectDataSet();
+        }
+    }
+}

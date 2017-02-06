@@ -1,0 +1,174 @@
+﻿<?xml version="1.0"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=169433
+  -->
+<configuration>
+  <configSections>
+    <section name="oracle.manageddataaccess.client" type="OracleInternal.Common.ODPMSectionHandler, Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+  </configSections>
+  <connectionStrings>
+    <!--EWS DATSABASE-->
+    <add name="ConnString" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMTsgaW5pdGlhbCBjYXRhbG9nPVBOQk1JU0RCX0RFQ18yMDE0OyB1c2VyIGlkPWFwcHVzZXI7cGFzc3dvcmQ9bWlzd2FrMzY1OyBUaW1lT3V0PTk5OTk5OTtwb29saW5nPXRydWU7bWluIHBvb2wgc2l6ZT0yMA==" providerName="System.Data.SqlClient"/>
+    <add name="ConnStringDecr" connectionString="Data Source=DBSERVER1\MSSQLSERVER1;Initial Catalog=PNBMISDB_DEC_2014;User ID=appuser;Password=miswak365;pooling=true;min pool size=20" providerName="System.Data.SqlClient"/>
+   
+    <!--D2K Inventory DATSABASE-->
+    <!--<add name="ConnString" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMTtJbml0aWFsIENhdGFsb2c9RDJLX0lOVkVOVE9SWTtVc2VyIElEPWFwcHVzZXI7UGFzc3dvcmQ9bWlzd2FrMzY1O3Bvb2xpbmc9dHJ1ZTttaW4gcG9vbCBzaXplPTIw" providerName="System.Data.SqlClient"/>
+    <add name="ConnStringDecr" connectionString="Data Source=DBSERVER1\MSSQLSERVER1;Initial Catalog=D2K_INVENTORY;User ID=appuser;Password=miswak365;pooling=true;min pool size=20" providerName="System.Data.SqlClient"/>-->
+  
+    <!--IIFL DATABASE-->
+    <!--<add name="ConnString" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMjsgSW5pdGlhbCBjYXRhbG9nPU9QVElJRkxfTEVHQUw7IHVzZXIgaWQ9c2E7cGFzc3dvcmQ9bWlzd2FrMzY1OyBUaW1lT3V0PTk5OTk5OQ==" providerName="System.Data.SqlClient" />
+    <add name="ConnStringDecr" connectionString="Data Source=DBSERVER1\MSSQLSERVER2;Initial Catalog=OPTIIFL_LEGAL;User ID=sa;Password=miswak365" providerName="System.Data.SqlClient" />-->
+
+    <!--AXIS DATSABASE-->
+    <!--<add name="ConnString" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMjsgSW5pdGlhbCBDYXRhbG9nPUFYSVNfTUlTREI7IFVzZXIgSUQ9c2E7UGFzc3dvcmQ9bWlzd2FrMzY1O3Bvb2xpbmc9dHJ1ZTttaW4gcG9vbCBzaXplPTIw" providerName="System.Data.SqlClient"/>
+    <add name="ConnStringDecr" connectionString="Data Source=DBSERVER1\MSSQLSERVER2; Initial Catalog=AXIS_MISDB; User ID=sa;Password=miswak365;pooling=true;min pool size=20" providerName="System.Data.SqlClient"/>-->
+
+    <!--CMA DATABASE-->
+    <!--<add name="ConnString" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMjsgaW5pdGlhbCBjYXRhbG9nPUNNQU1JU0RCOyB1c2VyIGlkPXNhO3Bhc3N3b3JkPW1pc3dhazM2NTsgVGltZU91dD05OTk5OTk7cG9vbGluZz10cnVlO21pbiBwb29sIHNpemU9MjA=" providerName="System.Data.SqlClient"/>
+    <add name="ConnStringDecr" connectionString="Data Source=DBSERVER1\MSSQLSERVER2;Initial Catalog=CMAMISDB;User ID=sa;Password=miswak365;pooling=true;min pool size=20" providerName="System.Data.SqlClient"/>-->
+
+    <add name="ConnStringOracle" connectionString="Data Source=192.168.1.120:1521/D2K;Persist Security Info=True;User ID=HR;Password=hr;" providerName="Oracle.ManagedDataAccess.Client"/>
+    <add name="ConnStringMySQL" connectionString="Server=192.168.1.175;Database=newtest_db;Uid=root;Pwd=miswak365;" providerName="MySql.Data.MySqlClient"/>
+    <!--<add name="ConnStringOracle" connectionString="RGF0YSBTb3VyY2U9REJTRVJWRVIxXE1TU1FMU0VSVkVSMTsgaW5pdGlhbCBjYXRhbG9nPVBOQk1JU0RCX0RFQ18yMDE0OyB1c2VyIGlkPWFwcHVzZXI7cGFzc3dvcmQ9bWlzd2FrMzY1OyBUaW1lT3V0PTk5OTk5OQ==" providerName="System.Data.SqlClient" />-->
+    <remove name="LocalMySqlServer"/>
+    <add name="LocalMySqlServer" connectionString="" providerName="MySql.Data.MySqlClient"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0"/>
+    <add key="webpages:Enabled" value="false"/>
+    <add key="PreserveLoginUrl" value="true"/>
+    <add key="ClientValidationEnabled" value="true"/>
+    <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
+    <add key="connectionType" value="SQL"/>
+  </appSettings>
+  <system.web>
+    <compilation debug="true" targetFramework="4.5.2"/>
+    <httpRuntime targetFramework="4.5.2" maxUrlLength="5000" maxRequestLength ="2097151"/>
+   
+    <pages>
+      <namespaces>
+        <add namespace="System.Web.Helpers"/>
+        <add namespace="System.Web.Mvc"/>
+        <add namespace="System.Web.Mvc.Ajax"/>
+        <add namespace="System.Web.Mvc.Html"/>
+        <add namespace="System.Web.Routing"/>
+        <add namespace="System.Web.WebPages"/>
+      </namespaces>
+    </pages>
+    <membership defaultProvider="MySQLMembershipProvider">
+      <providers>
+        <remove name="MySQLMembershipProvider"/>
+        <add name="MySQLMembershipProvider" type="MySql.Web.Security.MySQLMembershipProvider, MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" connectionStringName="LocalMySqlServer" enablePasswordRetrieval="false" enablePasswordReset="true" requiresQuestionAndAnswer="true" applicationName="/" requiresUniqueEmail="false" passwordFormat="Clear" maxInvalidPasswordAttempts="5" minRequiredPasswordLength="7" minRequiredNonalphanumericCharacters="1" passwordAttemptWindow="10" passwordStrengthRegularExpression=""/>
+      </providers>
+    </membership>
+    <profile defaultProvider="MySQLProfileProvider">
+      <providers>
+        <remove name="MySQLProfileProvider"/>
+        <add name="MySQLProfileProvider" type="MySql.Web.Profile.MySQLProfileProvider, MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" connectionStringName="LocalMySqlServer" applicationName="/"/>
+      </providers>
+    </profile>
+    <roleManager defaultProvider="MySQLRoleProvider">
+      <providers>
+        <remove name="MySQLRoleProvider"/>
+        <add name="MySQLRoleProvider" type="MySql.Web.Security.MySQLRoleProvider, MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" connectionStringName="LocalMySqlServer" applicationName="/"/>
+      </providers>
+    </roleManager>
+    <siteMap defaultProvider="MySqlSiteMapProvider">
+      <providers>
+        <remove name="MySqlSiteMapProvider"/>
+        <add name="MySqlSiteMapProvider" type="MySql.Web.SiteMap.MySqlSiteMapProvider, MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" connectionStringName="LocalMySqlServer" applicationName="/"/>
+      </providers>
+    </siteMap>
+    <webParts>
+      <personalization defaultProvider="MySQLPersonalizationProvider">
+        <providers>
+          <remove name="MySQLPersonalizationProvider"/>
+          <add name="MySQLPersonalizationProvider" type="MySql.Web.Personalization.MySqlPersonalizationProvider, MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d" connectionStringName="LocalMySqlServer" applicationName="/"/>
+        </providers>
+      </personalization>
+    </webParts>
+  </system.web>
+  <system.web.extensions>
+    <scripting>
+      <webServices>
+        <jsonSerialization maxJsonLength="999999999"/>
+      </webServices>
+    </scripting>
+  </system.web.extensions>
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false"/>
+    <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0"/>
+      <remove name="OPTIONSVerbHandler"/>
+      <remove name="TRACEVerbHandler"/>
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0"/>
+    </handlers>
+  <security>
+    <requestFiltering>
+      <requestLimits maxAllowedContentLength="2147483648" />
+    </requestFiltering>
+  </security>
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed"/>
+        <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0"/>
+      </dependentAssembly>
+      <!--<dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>-->
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Practices.Unity" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.0" newVersion="3.5.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <publisherPolicy apply="no"/>
+        <assemblyIdentity name="Oracle.ManagedDataAccess" publicKeyToken="89b483f429c47342" culture="neutral"/>
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:6 /nowarn:1659;1699;1701"/>
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:14 /nowarn:41008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+"/>
+    </compilers>
+  </system.codedom>
+  <system.data>
+    <DbProviderFactories>
+      <remove invariant="Oracle.ManagedDataAccess.Client"/>
+      <add name="ODP.NET, Managed Driver" invariant="Oracle.ManagedDataAccess.Client" description="Oracle Data Provider for .NET, Managed Driver" type="Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+      <remove invariant="MySql.Data.MySqlClient"/>
+      <add name="MySQL Data Provider" invariant="MySql.Data.MySqlClient" description=".Net Framework Data Provider for MySQL" type="MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+    </DbProviderFactories>
+  </system.data>
+  <oracle.manageddataaccess.client>
+    <version number="*">
+      <dataSources>
+        <dataSource alias="SampleDataSource" descriptor="(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL))) "/>
+      </dataSources>
+    </version>
+  </oracle.manageddataaccess.client>
+</configuration>

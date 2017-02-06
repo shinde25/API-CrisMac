@@ -1,0 +1,155 @@
+﻿using CrisMAcAPI.Areas.CommonComponent.Models;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.Alert.Models.Repository
+{
+    public class ProspectCommMngmntRepository : IProspectCommMngmntRepository
+    {
+        ProspectCommMangmntModel objModel = new ProspectCommMangmntModel();
+
+        public List<object> FetchData(string paramString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<object> GetAuxdata(string paramString)
+        {
+            JObject jsondata = JObject.Parse(paramString);
+            objModel._TimeKey = Convert.ToInt32(jsondata["_TimeKey"]);
+            objModel.NoticeTypeAlt_Key = Convert.ToInt32(jsondata["NoticeTypeAlt_Key"]);
+            objModel.TabFlag = jsondata["TabFlag"].ToString();
+            objModel._userLoginId = jsondata["_userLoginId"].ToString();
+
+            objModel.ProspectCommMangmentAuxSelect(objModel);
+            DataTable dt = objModel.ResultDataTable;
+            var column = dt.AsEnumerable().Select(x =>
+                new
+                {
+                    ProspectID = x.Field<string>("ProspectID"),
+                    CustomerName = x.Field<string>("CustomerName"),
+                    DynamicModel = x.Field<bool>("DynamicModel"),
+                    NoticePrintConfDt = x.Field<string>("NoticePrintConfDt"),
+                    NoticeTypes= x.Field<Int16>("CommNoticeTypeAlt_Key")
+                }).ToList();
+            var lst = ((IEnumerable<dynamic>)column).ToList();
+            return lst;
+        }
+
+        public List<object> GetMetaData()
+        {
+            List<object> lst = new List<object>();
+            objModel.ProspectCommMangment_ParameterisedMaster();
+            DataSet ds = objModel.ResultDataSet;
+
+            var DimNoticeType = ds.Tables[0].AsEnumerable().Select(x =>
+                new
+                {
+                    Code = x.Field<Int16>("Code"),
+                    Description = x.Field<string>("Description")
+                }).ToList();
+
+            var DimDispatchMode = ds.Tables[1].AsEnumerable().Select(x =>
+                new
+                {
+                    Code = x.Field<Int16>("Code"),
+                    Description = x.Field<string>("Description")
+                }).ToList();
+
+            lst.Add(DimNoticeType);
+            lst.Add(DimDispatchMode);
+            return lst;
+        }
+
+        public int InsertUpdateData(string jsonData)
+        {
+            int _resultvalue = 0;
+            // var results = JsonConvert.DeserializeObject<dynamic>(res);
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            objModel = serializer.Deserialize<ProspectCommMangmntModel>(jsonData);
+            _resultvalue = objModel.ProspectNoticePrint_InsertUpdate(objModel);
+
+            return _resultvalue;
+        }
+
+        public List<Dictionary<string, object>> ProspectContent(string paramString)
+        {
+            JObject jsondata = JObject.Parse(paramString);
+
+            objModel.ProspectID = jsondata["ProspectID"].ToString();
+            objModel.NoticeTypeAlt_Key = Convert.ToInt32(jsondata["NoticeType"]);
+            objModel._TimeKey = Convert.ToInt32(jsondata["TimeKey"]);
+
+            objModel.GetProspectContent();
+            DataSet ds = objModel.ResultDataSet;
+
+            List<Dictionary<string, object>> parentRow = new List<Dictionary<string, object>>();
+            Dictionary<string, object> childRow;
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                childRow = new Dictionary<string, object>();
+                foreach (DataColumn col in ds.Tables[0].Columns)
+                {
+                    childRow.Add(col.ColumnName, row[col]);
+                }
+                parentRow.Add(childRow);
+            }
+            return parentRow;
+        }
+
+        public async Task<string> customerForSMS(string paramString)
+        {
+            JObject jsondata = JObject.Parse(paramString);
+
+            objModel.ProspectID = jsondata["ProspectID"].ToString();
+            objModel._TimeKey = Convert.ToInt32(jsondata["TimeKey"]);
+
+            objModel.GetCustomerForSMS();
+            DataSet ds = objModel.ResultDataSet;
+
+            List<object> custList = ds.ToList();
+
+            foreach (List<Dictionary<string, object>> _obj in custList)
+            {
+                for (int i = 0; i < _obj.Count - 1; i++)
+                {
+                    string mobileNo = _obj[i]["MobileNo"].ToString();
+                    string msgContent = _obj[i]["CommunicationTemplateContent"].ToString();
+
+                    //  string strUrl = "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=amit.amitjoshi@gmail.com:05052001&senderID=TEST SMS&receipientno="+ mobileNo + "&msgtxt=" + msgContent;
+                    string strUrl = "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=d2k@d2kindia.com:d2kd2k&senderID=TEST SMS&receipientno=" + mobileNo + "&msgtxt=" + msgContent + "";
+                    try
+                    {
+                        var request = (HttpWebRequest)WebRequest.Create(strUrl);
+                        WebResponse webResp = request.GetResponse();
+
+                        if (((HttpWebResponse)webResp).StatusCode == HttpStatusCode.OK)
+                        {
+                            // message sent
+                        }
+                        else
+                        {
+                            // message not sent
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return "";
+        }
+
+    }
+}

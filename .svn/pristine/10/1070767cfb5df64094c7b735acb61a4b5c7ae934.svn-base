@@ -1,0 +1,188 @@
+
+using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.UPGRADATION.Models.Repository;
+using System;
+using System.Collections.Generic;
+using System.Web;
+//using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Http;
+using System.Net.Http;
+using CrisMAcAPI.Areas.CMA.Models;
+using System.Net;
+
+namespace CrisMAcAPI.Areas.UPGRADATION.Controllers
+{
+    public class AxisUpgradationController : ApiController
+    {
+        IAxisUpgradationRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+
+        public AxisUpgradationController(IAxisUpgradationRepository repository)
+        {
+            this.repository = repository;
+        }         
+
+        [Route("CrisMAc/TldlRepaySchSelect/{param}")]//----------TLDLDetailSelect
+        [HttpGet]
+        public string TldlRepaySchSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.TldlRepaySchSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        
+        [Route("CrisMAc/BillDetailSelect/{param}")]
+        [HttpGet]
+        public string BillDetailSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.BillDetailSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/CcodDetailSelect/{param}")]
+        [HttpGet]
+        public string CcodDetailSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.CcodDetailSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [Route("CrisMAc/UpgradationParameterSelect/{param}")]
+        [HttpGet]
+        public string UpgradationParameterSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.UpgradationParameterSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/UpgradationParameterInsertUpdate/")]
+        [HttpPost]
+        public HttpResponseMessage UpgradationParameterInsertUpdate()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.UpgradationParameterInsertUpdateRepo(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+
+            //param = objutility.DecryptString(param);
+            //    var objAuxDetail = repository.UpgradationParameterInsertUpdateRepo(param);
+            //    var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            //    return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/MarkUpgradationcycleSelect/{param}")]
+        [HttpGet]
+        public string MarkUpgradationcycleSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.MarkUpgradationcycleSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/MarkInsertCycleUpdateData/")]
+        [HttpPost]
+        public HttpResponseMessage MarkInsertCycleUpdateData()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.MarkInsertUpdateData(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+
+
+    
+
+
+
+    #region  Updrade Approval Auth
+    [Route("CrisMAc/UpgradeAuthSelect/{param}")]
+        [HttpGet]
+        public string UpgradeApprovalAuthSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.UpgradeAuthSelect(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/UpgradeAuthInsertUpdate/")]
+        [HttpPost]
+        public HttpResponseMessage UpgradeApprovalAuthInsertUpdate()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.UpgradeAuthInsertUpdate(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+        #endregion  Updrade Approval Auth
+    }
+}

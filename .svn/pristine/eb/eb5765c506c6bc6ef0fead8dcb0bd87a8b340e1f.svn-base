@@ -1,0 +1,136 @@
+using Microsoft.Practices.Unity;
+using System;
+using CrisMAcAPI.Models.Repository.AttributeRepository;
+using CrisMAcAPI.Models.Repository.BalanceDetailsRepository;
+using CrisMAcAPI.Models.Repository.BranchDetailsRepository;
+using CrisMAcAPI.Models.Repository.UserMaintananceRepository;
+using CrisMAcAPI.Models.Repository.StockStatementRepository;
+using CrisMAcAPI.Areas.CommonComponent.Models.Repository.CommonMasterRepository;
+using CrisMAcAPI.Models.Repository.UserGroupDeptRepository;
+using CrisMAcAPI.Models.Repository;
+using CrisMAcAPI.Models.Repository.UserCreationRepository;
+using CrisMAcAPI.Models.Repository.ActivityLinkageRepository;
+using CrisMAcAPI.Models.Repository.SearchStringRepository;
+using CrisMAcAPI.Models.Repository.ReportParameterRepository;
+using CrisMAcAPI.Models.Repository.CompanyWiseActivity;
+using CrisMAcAPI.Models.Repository.CompanyWiseExchSymbolRepository;
+using CrisMAcAPI.Models.Repository.LoginRepository;
+using CrisMAcAPI.Areas.CommonComponent.Models.Repository.GapDataMasterRepository;
+using CrisMAcAPI.Areas.Alert.Models.Repository;
+using CrisMAcAPI.Areas.CommonComponent.Models.Repository.CommonMetaMasterRepository;
+using CrisMAcAPI.Models.Repository.RemarkAggregator;
+using CrisMAcAPI.Models.Repository.DocumentUploadRepository;
+using CrisMAcAPI.Models.Repository.CustomerRemarkRepository;
+using CrisMAcAPI.Models.Repository.DiaryActionEventClosureRepository;
+using CrisMAcAPI.Areas.D2k_Inventory.Models.Repository.AppLoginRepository;
+using CrisMAcAPI.Areas.D2k_Inventory.Models.Repository.AppMasterRepository;
+using CrisMAcAPI.Areas.CMA.Models.Repository.CMA_CommonRepository;
+using CrisMAcAPI.Areas.UPGRADATION.Models.Repository;
+using CrisMAcAPI.Areas.CMA.Models.Repository.RemarkRepository;
+using CrisMAcAPI.Models.Repository.CustomerAllocationRepository;
+using CrisMAcAPI.Models.Repository.IrregularityRepository;
+using CrisMAcAPI.Models.Repository.EWSPaymentTrackingRepository;
+using CrisMAcAPI.Areas.CMA.Models.Repository.AppLoginRepository;
+using CrisMAcAPI.Areas.CMA.Models.Repository.DataSync;
+using CrisMAcAPI.Models.Repository.ParameterMetricsRepository;
+using CrisMAcAPI.Models.Repository.SubParameterMatrixRepository;
+using CrisMAcAPI.Models.Repository.DashBoardRepository;
+using CrisMAcAPI.Models.Repository.App_DashboardRepository;
+using CrisMAcAPI.Models.Repository.SegmentMatrixRepository;
+using CrisMAcAPI.Models.Repository.SolutionParameterRepository;
+using CrisMAcAPI.Areas.Alert.Models.Repository.BulkSupervisorCustomerAllocationRepository;
+using CrisMAcAPI.Areas.Alert.Models.Repository.BulkSupervisorCustomerAllocation;
+using CrisMAcAPI.Areas.Alert.Models.Repository.ProspectMiscInfo;
+using CrisMAcAPI.Areas.Axis_MOC.Models.Repository.Incorporation;
+using CrisMAcAPI.Areas.FAM.Models.Repository.AssetTransactionMainRepository;
+using CrisMAcAPI.Areas.FAM.Models.Repository.ReplicationRepository;
+using CrisMAcAPI.Areas.FAM.Models.Repository.AssetCommonRepository;
+using CrisMAcAPI.Areas.FAM.Models.Repository.AssetDocUploadRepository;
+using CrisMAcAPI.Areas.FAM.Models.Repository.BranchCreationRepository;
+using CrisMAcAPI.Models.Repository.CustomerAnalysis;
+
+namespace CrisMAcAPI
+{
+    public static class UnityConfig
+    {
+        #region Unity Container
+        private static Lazy<IUnityContainer> container = new Lazy<IUnityContainer>(() =>
+        {
+            var container = new UnityContainer();
+            RegisterTypes(container);
+            return container;
+        });
+        public static IUnityContainer GetConfiguredContainer()
+        {
+            return container.Value;
+        }
+        #endregion
+        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <param name="container">The unity container to configure.</param>
+        /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
+        /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
+        public static void RegisterTypes(IUnityContainer container)
+        {
+            container.RegisterType<ILoginRepository, LoginRepository>();
+            container.RegisterType<IAttributeRepository, AttributeRepository>();
+            container.RegisterType<IUserMaintananceRepository, UserMaintananceRepository>();
+            container.RegisterType<IStockStatementRepository, StockStatementRepository>();
+            container.RegisterType<IBranchRepository, BranchRepository>();
+            container.RegisterType<IBalanceSheetRepository, BalanceSheetRepository>();
+            container.RegisterType<ICommonMasterRepository, CommonMasterRepository>();
+            container.RegisterType<ICommonMetaMasterRepository, CommonMetaMasterRepository>();
+            container.RegisterType<IGapDataMasterRepository, GapDataMasterRepository>();
+            container.RegisterType<IUserGroupDeptRepository, UserGroupDeptRepository>();
+            container.RegisterType<IUserCreationRepository, UserCreationRepository>();
+            container.RegisterType<IActivityLinkageRepository, ActivityLinkageRepository>();
+            container.RegisterType<ISearchStringRepository, SearchStringRepository>();
+            container.RegisterType<IReportParameterRepository, ReportParameterRepository>();
+            container.RegisterType<ICompanyWiseActivityRepository, CompanyWiseActivityRepository>();
+            container.RegisterType<ICompanyWiseExchSymbolRepository, CompanyWiseExchSymbolRepository>();
+            container.RegisterType<IAlertRepository, AlertRepository>();
+            container.RegisterType<IProspectCommMngmntRepository, ProspectCommMngmntRepository>();
+            container.RegisterType<IRemarkAggregatorRepository, RemarkAggregatorRepository>();
+            container.RegisterType<IDocumentUploadRepository, DocumentUploadRepository>();
+            container.RegisterType<IDiaryActionEventClosureRepository, DiaryActionEventClosureRepository>();
+
+            container.RegisterType<IAppLoginRepository, AppLoginRepository>();
+            container.RegisterType<IAppInventoryRepository, AppInventoryRepository>();
+            container.RegisterType<ICustomerRepository, CustomerRepository>();
+
+            container.RegisterType<IAxisUpgradationRepository, AxisUpgradationRepository>();
+            container.RegisterType<IRemarkRepository, RemarkRepository>();
+            container.RegisterType<ICustomerRemarkRepository, CustomerRemarkRepository>();
+            container.RegisterType<IDiaryActionEventClosureRepository, DiaryActionEventClosureRepository>();
+            
+            container.RegisterType<ICMALoginRepository, CMALoginRepository>();
+            container.RegisterType<IDataSyncRepository, DataSyncRepository>();
+
+
+            container.RegisterType<ICustomerAllocationRepository, CustomerAllocationRepository>();
+            container.RegisterType<IIrregularityDetailRepository, IrregularityDetailRepository>();
+            container.RegisterType<IEWSPaymentTrackingRepository, EWSPaymentTrackingRepository>();
+            container.RegisterType<IEwsHomeDashboardRepository, EwsHomeDashboardRepository>();
+            container.RegisterType<IParameterMetricsRepository, ParameterMetricsRepository>();
+            container.RegisterType<ISubParameterMatrixRepository, SubParameterMatrixRepository>();
+            container.RegisterType<IApp_DashboardRepository, App_DashboardRepository>();
+            container.RegisterType<ISegmentMatrixRepository, SegmentMatrixRepository>();            
+            container.RegisterType<ISolutionParameterRepository, SolutionParameterRepository>();
+            container.RegisterType<IBulkSupervisorCustomerAllocationRepository, BulkSupervisorCustomerAllocationRepository>();
+            container.RegisterType<IProspectMiscInfoRepository, ProspectMiscInfoRepository>();
+            container.RegisterType<ICustomerAnalysisRepository, CustomerAnalysisRepository>();
+
+            container.RegisterType<CrisMAcAPI.Areas.LOS.Models.Repository.CustomerRepository.ICustomerRepository, CrisMAcAPI.Areas.LOS.Models.Repository.CustomerRepository.CustomerRepository>();
+            container.RegisterType<CrisMAcAPI.Areas.LOS.Models.Repository.AdminRepository.IAdminRepository, CrisMAcAPI.Areas.LOS.Models.Repository.AdminRepository.AdminRepository>();
+            container.RegisterType<CrisMAcAPI.Areas.LOS.Models.Repository.UserRepository.IUserRepository, CrisMAcAPI.Areas.LOS.Models.Repository.UserRepository.UserRepository>();
+            container.RegisterType<CrisMAcAPI.Areas.LOS.Models.Repository.ScreenRepository.IScreenRepository, CrisMAcAPI.Areas.LOS.Models.Repository.ScreenRepository.ScreenRepository>();
+
+            container.RegisterType<ICustAccountMocRepository, CustAccountMocRepository>();
+            container.RegisterType<IAssetTransactionMainRepository, AssetTransactionMainRepository>();
+            container.RegisterType<ICommonNewAssetRepository, CommonNewAssetRepository>();
+            
+            container.RegisterType<IAssetCommonRepository, AssetCommonRepository>();
+        }
+
+        
+    }
+}

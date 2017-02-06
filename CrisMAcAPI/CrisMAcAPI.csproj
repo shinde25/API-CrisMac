@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C4BFB80-8B30-4640-926F-E1BE2C08F3D1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CrisMAcAPI</RootNamespace>
+    <AssemblyName>CrisMAcAPI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CrisMAcWebApp\CrisMAc\bin\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>C:\Users\Administrator\Desktop\Owin\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Cors.3.0.1\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Web, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Web.6.9.7\lib\net45\MySql.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.022\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Unity.WebApi, Version=5.1.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.WebAPI.5.1\lib\net45\Unity.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\..\..\..\Visual Studio 2013\Projects\MVC_D2K\MVC_D2K\bin\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Alert\AlertAreaRegistration.cs" />
+    <Compile Include="Areas\Alert\Controllers\AlertController.cs" />
+    <Compile Include="Areas\Alert\Controllers\BulkSupervisorCustomerAllocationController.cs" />
+    <Compile Include="Areas\Alert\Controllers\ProspectCommMangmntController.cs" />
+    <Compile Include="Areas\Alert\Controllers\ProspectMiscInfoController.cs" />
+    <Compile Include="Areas\Alert\Models\AlertModel.cs" />
+    <Compile Include="Areas\Alert\Models\BulkSupervisorCustomerAllocationModel.cs" />
+    <Compile Include="Areas\Alert\Models\ProspectCommMangmntModel.cs" />
+    <Compile Include="Areas\Alert\Models\ProspectMiscInfoModel.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\AlertRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\BulkSupervisorCustomerAllocation\BulkSupervisorCustomerAllocationRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\BulkSupervisorCustomerAllocation\IBulkSupervisorCustomerAllocationRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\IAlertRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\IProspectCommMngmntRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\ProspectCommMngmntRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\ProspectMiscInfo\IProspectMiscInfoRepository.cs" />
+    <Compile Include="Areas\Alert\Models\Repository\ProspectMiscInfo\ProspectMiscInfoRepository.cs" />
+    <Compile Include="Areas\Axis_MOC\Controllers\CustAccountMocController.cs" />
+    <Compile Include="Areas\Axis_MOC\IncorporationRegistration.cs" />
+    <Compile Include="Areas\Axis_MOC\Models\CustAccountMocModel.cs" />
+    <Compile Include="Areas\Axis_MOC\Models\Repository\Incorporation\CustAccountMocRepository.cs" />
+    <Compile Include="Areas\Axis_MOC\Models\Repository\Incorporation\ICustAccountMocRepository.cs" />
+    <Compile Include="Areas\CMA\CMAAreaRegistration.cs" />
+    <Compile Include="Areas\CMA\Controllers\CMALoginController.cs" />
+    <Compile Include="Areas\CMA\Controllers\CustomerController.cs" />
+    <Compile Include="Areas\CMA\Controllers\DataSyncController.cs" />
+    <Compile Include="Areas\CMA\Controllers\RemarkController.cs" />
+    <Compile Include="Areas\CMA\Models\CMALoginModel.cs" />
+    <Compile Include="Areas\CMA\Models\CustomerModel.cs" />
+    <Compile Include="Areas\CMA\Models\DataSyncModel.cs" />
+    <Compile Include="Areas\CMA\Models\RemarkModel.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\AppLoginRepository\CMALoginRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\AppLoginRepository\ICMALoginRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\CustomerRepository\CustomerRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\CustomerRepository\ICustomerRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\DataSync\DataSyncRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\DataSync\IDataSyncRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\RemarkRepository\IRemarkRepository.cs" />
+    <Compile Include="Areas\CMA\Models\Repository\RemarkRepository\RemarkRepository.cs" />
+    <Compile Include="Areas\CMA\Models\ResponseStatusModel.cs" />
+    <Compile Include="Areas\CommonComponent\CommonMasterAreaRegistration.cs" />
+    <Compile Include="Areas\CommonComponent\Controllers\CommonMasterController.cs" />
+    <Compile Include="Areas\CommonComponent\Controllers\CommonMetaMasterController.cs" />
+    <Compile Include="Areas\CommonComponent\Controllers\GapDataMasterController.cs" />
+    <Compile Include="Areas\CommonComponent\Models\CheckpendingModal.cs" />
+    <Compile Include="Areas\CommonComponent\Models\CommonMetaMasterModel.cs" />
+    <Compile Include="Areas\CommonComponent\Models\GapDataMasterModel.cs" />
+    <Compile Include="Areas\CommonComponent\Models\GlobalExtension.cs" />
+    <Compile Include="Areas\CommonComponent\Models\MasterTableMeta.cs" />
+    <Compile Include="Areas\CommonComponent\Models\ReportModel.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\CommonMasterRepository\CommonMasterRepository.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\CommonMasterRepository\ICommonMasterRepository.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\CommonMetaMasterRepository\CommonMetaMasterRepository.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\CommonMetaMasterRepository\ICommonMetaMasterRepository.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\GapDataMasterRepository\GapDataMasterRepository.cs" />
+    <Compile Include="Areas\CommonComponent\Models\Repository\GapDataMasterRepository\IGapDataMasterRepository.cs" />
+    <Compile Include="Areas\D2k_Inventory\Controllers\AppInventoryController.cs" />
+    <Compile Include="Areas\D2k_Inventory\Controllers\AppLoginController.cs" />
+    <Compile Include="Areas\D2k_Inventory\D2k_InventoryAreaRegistration.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\AppInventoryModel.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\AppLoginModel.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\Repository\AppInventoryRepository\AppInventoryRepository.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\Repository\AppInventoryRepository\IAppInventoryRepository.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\Repository\AppLoginRepository\AppLoginRepository.cs" />
+    <Compile Include="Areas\D2k_Inventory\Models\Repository\AppLoginRepository\IAppLoginRepository.cs" />
+    <Compile Include="Areas\EWS\EWSAreaRegistration.cs" />
+    <Compile Include="Areas\FAM\Controllers\AssetCommonController.cs" />
+    <Compile Include="Areas\FAM\Controllers\AssetDocUploadController.cs" />
+    <Compile Include="Areas\FAM\Controllers\AssetTransactionMainController.cs" />
+    <Compile Include="Areas\FAM\Controllers\BranchCreationController.cs" />
+    <Compile Include="Areas\FAM\Controllers\CommonNewAssetController.cs" />
+    <Compile Include="Areas\FAM\FAMAreaRegistration.cs" />
+    <Compile Include="Areas\FAM\Models\AssetCommonModel.cs" />
+    <Compile Include="Areas\FAM\Models\AssetTransactionMainModel.cs" />
+    <Compile Include="Areas\FAM\Models\BranchCreationModel.cs" />
+    <Compile Include="Areas\FAM\Models\CommonNewCreateAssetModel.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetCommonRepository\AssetCommonRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetCommonRepository\IAssetCommonRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetDocUploadModel.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetDocUploadRepository\AssetDocUploadRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetDocUploadRepository\IAssetDocUploadRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetTransactionMainRepository\AssetTransactionMainRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\AssetTransactionMainRepository\IAssetTransactionMainRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\BranchCreationRepository\BranchCreationRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\BranchCreationRepository\IBranchCreationRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\CommonNewAssetRepository\CommonNewAssetRepository.cs" />
+    <Compile Include="Areas\FAM\Models\Repository\CommonNewAssetRepository\ICommonNewAssetRepository.cs" />
+    <Compile Include="Areas\IFAM_Premises\Controllers\CommonNewPremiseController.cs" />
+    <Compile Include="Areas\IFAM_Premises\Controllers\PremiseTransactionMainController.cs" />
+    <Compile Include="Areas\IFAM_Premises\IFAM_PremisesAreaRegistration.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\CommonPremiseModel.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\PremiseTransactionMainModel.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\Repository\CommonPremiseRepository\ICommonPremiseRepository.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\Repository\CommonPremiseRepository\CommonPremiseRepository.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\Repository\PremiseTransactionMainRepository\IPremiseTransactionMainRepository.cs" />
+    <Compile Include="Areas\IFAM_Premises\Models\Repository\PremiseTransactionMainRepository\PremiseTransactionMainRepository.cs" />
+    <Compile Include="Areas\Krishak\Controllers\App_OperationController.cs" />
+    <Compile Include="Areas\Krishak\Controllers\BranchSelectionController.cs" />
+    <Compile Include="Areas\Krishak\KrishakAreaRegistration.cs" />
+    <Compile Include="Areas\Krishak\Models\App_OperationModel.cs" />
+    <Compile Include="Areas\Krishak\Models\BranchSelectionModel.cs" />
+    <Compile Include="Areas\Krishak\Models\Repository\App_OperationRepository\App_OperationListRepositories.cs" />
+    <Compile Include="Areas\Krishak\Models\Repository\App_OperationRepository\IApp_OperationListRepositories.cs" />
+    <Compile Include="Areas\Krishak\Models\Repository\BranchSelectionReository\BranchRepositories.cs" />
+    <Compile Include="Areas\Krishak\Models\Repository\BranchSelectionReository\IBranchRepositories.cs" />
+    <Compile Include="Areas\LOS\Controllers\AdminController.cs" />
+    <Compile Include="Areas\LOS\Controllers\CustomerController.cs" />
+    <Compile Include="Areas\LOS\Controllers\ScreenController.cs" />
+    <Compile Include="Areas\LOS\Controllers\UserController.cs" />
+    <Compile Include="Areas\LOS\LOSAreaRegistration.cs" />
+    <Compile Include="Areas\LOS\Models\AdminModel.cs" />
+    <Compile Include="Areas\LOS\Models\CustomerModel.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\AdminRepository\AdminRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\AdminRepository\IAdminRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\CustomerRepository\CustomerRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\CustomerRepository\ICustomerRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\ScreenRepository\IScreenRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\ScreenRepository\ScreenRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\UserRepository\IUserRepository.cs" />
+    <Compile Include="Areas\LOS\Models\Repository\UserRepository\UserRepository.cs" />
+    <Compile Include="Areas\LOS\Models\ScreenModel.cs" />
+    <Compile Include="Areas\LOS\Models\UserModel.cs" />
+    <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Reports\Models\ReportModel.cs" />
+    <Compile Include="Areas\Reports\Models\Repository\IReportRepository.cs" />
+    <Compile Include="Areas\Reports\Models\Repository\ReportRepository.cs" />
+    <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
+    <Compile Include="Areas\UPGRADATION\Controllers\AxisUpgradationController.cs" />
+    <Compile Include="Areas\UPGRADATION\Models\AxisUpgradationModel.cs" />
+    <Compile Include="Areas\UPGRADATION\Models\Repository\AxisUpgradation\AxisUpgradationRepository.cs" />
+    <Compile Include="Areas\UPGRADATION\Models\Repository\AxisUpgradation\IAxisUpgradationRepository.cs" />
+    <Compile Include="Areas\UPGRADATION\UPGRADATIONAreaRegistration.cs" />
+    <Compile Include="Controllers\ActivityLinkageController.cs" />
+    <Compile Include="Controllers\App_DashboardController.cs" />
+    <Compile Include="Controllers\AttributeController.cs" />
+    <Compile Include="Controllers\BalanceSheetController.cs" />
+    <Compile Include="Controllers\BranchDetailsController.cs" />
+    <Compile Include="Controllers\CompanyWiseActivityController.cs" />
+    <Compile Include="Controllers\companyWiseExchSymbolController.cs" />
+    <Compile Include="Controllers\CustomerAllocationController.cs" />
+    <Compile Include="Controllers\CustomerAnalysisController.cs" />
+    <Compile Include="Controllers\CustomerRemarkController.cs" />
+    <Compile Include="Controllers\DiaryActionEventClosureController.cs" />
+    <Compile Include="Controllers\DocumentUploadController.cs" />
+    <Compile Include="Controllers\EwsHomeDashboardController.cs" />
+    <Compile Include="Controllers\EWSPaymentTrackingController.cs" />
+    <Compile Include="Controllers\IrregularityDetailController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ParameterMetricsController.cs" />
+    <Compile Include="Controllers\RemarkAggregatorController.cs" />
+    <Compile Include="Controllers\ReportParameterController.cs" />
+    <Compile Include="Controllers\SearchStringController.cs" />
+    <Compile Include="Controllers\SegmentMatrixController.cs" />
+    <Compile Include="Controllers\SolutionParameterController.cs" />
+    <Compile Include="Controllers\StockStatementController.cs" />
+    <Compile Include="Controllers\SubParameterMatrixController.cs" />
+    <Compile Include="Controllers\UserCreationController.cs" />
+    <Compile Include="Controllers\UserGroupDeptController.cs" />
+    <Compile Include="Controllers\UserMaintananceController.cs" />
+    <Compile Include="Filter\LogFilter.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActivityLinkageModel.cs" />
+    <Compile Include="Models\AlertMessageCreationModel.cs" />
+    <Compile Include="Models\AlertMessageDisplayModel.cs" />
+    <Compile Include="Models\App_DashboardModel.cs" />
+    <Compile Include="Models\AttributeModel.cs" />
+    <Compile Include="Models\BalanceSheetModel.cs" />
+    <Compile Include="Models\BranchSelection.cs" />
+    <Compile Include="Models\CommonInterface\ICommonInterface.cs" />
+    <Compile Include="Models\CommonProperties.cs" />
+    <Compile Include="Models\CompanyListModel.cs" />
+    <Compile Include="Models\CompanyWiseExchSymbolModel.cs" />
+    <Compile Include="Models\CustomerAllocationModel.cs" />
+    <Compile Include="Models\CustomerAnalysisModel.cs" />
+    <Compile Include="Models\CustomerRemarkModel.cs" />
+    <Compile Include="Models\DiaryActionEventClosureModel.cs" />
+    <Compile Include="Models\DocumentUploadModel.cs" />
+    <Compile Include="Models\EwsHomeDashboardModel.cs" />
+    <Compile Include="Models\EWSPaymentTrackingModel.cs" />
+    <Compile Include="Models\GlobalExtension.cs" />
+    <Compile Include="Models\GroupCreatParaMastDataModel.cs" />
+    <Compile Include="Models\IrregularityDetailModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\MetaUserFieldDetail.cs" />
+    <Compile Include="Models\CompanyWiseActivityModel.cs" />
+    <Compile Include="Models\ParameterMetricsModel.cs" />
+    <Compile Include="Models\RemarkAggregatorModel.cs" />
+    <Compile Include="Models\ReportParameterModel.cs" />
+    <Compile Include="Models\Repository\ActivityLinkageRepository\ActivityLinkageRepository.cs" />
+    <Compile Include="Models\Repository\ActivityLinkageRepository\IActivityLinkageRepository.cs" />
+    <Compile Include="Models\Repository\AlertMessageCreationRepository\AlertMessageCreationRepository.cs" />
+    <Compile Include="Models\Repository\AlertMessageCreationRepository\IAlertMessageCreationRepository.cs" />
+    <Compile Include="Models\Repository\AlertMessageDisplayRepository\AlertMessageDisplayRepository.cs" />
+    <Compile Include="Models\Repository\AlertMessageDisplayRepository\IAlertMessageDisplayRepository.cs" />
+    <Compile Include="Models\Repository\App_DashboardRepository\App_DashboardRepository.cs" />
+    <Compile Include="Models\Repository\App_DashboardRepository\IApp_DashboardRepository.cs" />
+    <Compile Include="Models\Repository\AttributeRepository\AttributeRepository.cs" />
+    <Compile Include="Models\Repository\AttributeRepository\IAttributeRepository.cs" />
+    <Compile Include="Models\Repository\BalanceDetailsRepository\BalanceSheetRepository.cs" />
+    <Compile Include="Models\Repository\BalanceDetailsRepository\IBalanceSheetRepository.cs" />
+    <Compile Include="Models\Repository\BranchDetailsRepository\BranchRepository.cs" />
+    <Compile Include="Models\Repository\BranchDetailsRepository\IBranchRepository.cs" />
+    <Compile Include="Models\Repository\CompanyListRepository\CompanyListRepository.cs" />
+    <Compile Include="Models\Repository\CompanyListRepository\ICompanyListRepository.cs" />
+    <Compile Include="Models\Repository\CompanyWiseActivity\CompanyWiseActivityRepository.cs" />
+    <Compile Include="Models\Repository\CompanyWiseActivity\ICompanyWiseActivityRepository.cs" />
+    <Compile Include="Models\Repository\CompanyWiseExchSymbolRepository\CompanyWiseExchSymbolRepository.cs" />
+    <Compile Include="Models\Repository\CompanyWiseExchSymbolRepository\ICompanyWiseExchSymbolRepository.cs" />
+    <Compile Include="Models\Repository\CustomerAllocationRepository\CustomerAllocationRepository.cs" />
+    <Compile Include="Models\Repository\CustomerAllocationRepository\ICustomerAllocationRepository.cs" />
+    <Compile Include="Models\Repository\CustomerAnalysis\CustomerAnalysisRepository.cs" />
+    <Compile Include="Models\Repository\CustomerAnalysis\ICustomerAnalysisRepository.cs" />
+    <Compile Include="Models\Repository\CustomerRemarkRepository\CustomerRemarkRepository.cs" />
+    <Compile Include="Models\Repository\CustomerRemarkRepository\ICustomerRemarkRepository.cs" />
+    <Compile Include="Models\Repository\DiaryActionEventClosureRepository\DiaryActionEventClosureRepository.cs" />
+    <Compile Include="Models\Repository\DiaryActionEventClosureRepository\IDiaryActionEventClosureRepository.cs" />
+    <Compile Include="Models\Repository\DocumentUploadRepository\DocumentUploadRepository.cs" />
+    <Compile Include="Models\Repository\DocumentUploadRepository\IDocumentUploadRepository.cs" />
+    <Compile Include="Models\Repository\EwsHomeDashboardRepository\EwsHomeDashboardRepository.cs" />
+    <Compile Include="Models\Repository\EwsHomeDashboardRepository\IEwsHomeDashboardRepository.cs" />
+    <Compile Include="Models\Repository\EWSPaymentTrackingRepository\EWSPaymentTrackingRepository.cs" />
+    <Compile Include="Models\Repository\EWSPaymentTrackingRepository\IEWSPaymentTrackingRepository.cs" />
+    <Compile Include="Models\Repository\IrregularityRepository\IIrregularityDetailRepository.cs" />
+    <Compile Include="Models\Repository\IrregularityRepository\IrregularityDetailRepository.cs" />
+    <Compile Include="Models\Repository\LoginRepository\ILoginRepository.cs" />
+    <Compile Include="Models\Repository\LoginRepository\LoginRepository.cs" />
+    <Compile Include="Models\Repository\ParameterMetricsRepository\IParameterMetricsRepository.cs" />
+    <Compile Include="Models\Repository\ParameterMetricsRepository\ParameterMetricsRepository.cs" />
+    <Compile Include="Models\Repository\RemarkAggregator\IRemarkAggregatorRepository.cs" />
+    <Compile Include="Models\Repository\RemarkAggregator\RemarkAggregatorRepository.cs" />
+    <Compile Include="Models\Repository\ReportParameterRepository\IReportParameterRepository.cs" />
+    <Compile Include="Models\Repository\ReportParameterRepository\ReportParameterRepository.cs" />
+    <Compile Include="Models\Repository\SearchStringRepository\ISearchStringRepository.cs" />
+    <Compile Include="Models\Repository\SearchStringRepository\SearchStringRepository.cs" />
+    <Compile Include="Models\Repository\SegmentMatrixRepository\ISegmentMatrixRepository.cs" />
+    <Compile Include="Models\Repository\SegmentMatrixRepository\SegmentMatrixRepository.cs" />
+    <Compile Include="Models\Repository\SolutionParameterRepository\ISolutionParameterRepository.cs" />
+    <Compile Include="Models\Repository\SolutionParameterRepository\SolutionParameterRepository.cs" />
+    <Compile Include="Models\Repository\StockStatementRepository\IStockStatementRepository.cs" />
+    <Compile Include="Models\Repository\StockStatementRepository\StockStatementRepository.cs" />
+    <Compile Include="Models\Repository\SubParameterMatrixRepository\ISubParameterMatrixRepository.cs" />
+    <Compile Include="Models\Repository\SubParameterMatrixRepository\SubParameterMatrixRepository.cs" />
+    <Compile Include="Models\Repository\UserCreationRepository\IUserCreationRepository.cs" />
+    <Compile Include="Models\Repository\UserCreationRepository\UserCreationRepository.cs" />
+    <Compile Include="Models\Repository\UserGroupDeptRepository\IUserGroupDeptRepository.cs" />
+    <Compile Include="Models\Repository\UserGroupDeptRepository\UserGroupDeptRepository.cs" />
+    <Compile Include="Models\Repository\UserMaintananceRepository\IUserMaintananceRepository.cs" />
+    <Compile Include="Models\Repository\UserMaintananceRepository\UserMaintananceRepository.cs" />
+    <Compile Include="Models\SearchStringModel.cs" />
+    <Compile Include="Models\SegmentMatrixModel.cs" />
+    <Compile Include="Models\SolutionParameterModel.cs" />
+    <Compile Include="Models\StockStatementModel.cs" />
+    <Compile Include="Models\SubParameterMatrixModel.cs" />
+    <Compile Include="Models\UserchangedUserpwd.cs" />
+    <Compile Include="Models\UserCreationModel.cs" />
+    <Compile Include="Models\UserGroupDeptModel.cs" />
+    <Compile Include="Models\UserMaintenanceModel.cs" />
+    <Compile Include="Models\Utility\UtilityWeb.cs" />
+    <Compile Include="Models\Utility\UtilityWebGenric.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\D2kAuthorizationServerProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="Areas\CommonComponent\Views\web.config" />
+    <Content Include="Areas\Reports\Views\web.config" />
+    <Content Include="ClassDiagram1.cd" />
+    <Content Include="Areas\Alert\Views\web.config" />
+    <Content Include="Areas\D2k_Inventory\Views\web.config" />
+    <Content Include="Areas\CMA\Views\web.config" />
+    <Content Include="Areas\UPGRADATION\Views\web.config" />
+    <Content Include="Areas\Axis_MOC\Views\web.config" />
+    <Content Include="Areas\FAM\Views\web.config" />
+    <Content Include="Areas\Krishak\Views\web.config" />
+    <Content Include="Areas\LOS\Views\web.config" />
+    <Content Include="Areas\IFAM_Premises\Views\web.config" />
+    <Content Include="Areas\IFAM_Premises\Models\CommonPremiseModel.cs.mine" />
+    <Content Include="Areas\IFAM_Premises\Models\CommonPremiseModel.cs.r968" />
+    <Content Include="Areas\IFAM_Premises\Models\CommonPremiseModel.cs.r969" />
+    <None Include="Properties\PublishProfiles\CrisMAcAPI_Publish.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Alert\Views\Alert\" />
+    <Folder Include="Areas\Alert\Views\Shared\" />
+    <Folder Include="Areas\Axis_MOC\Views\Shared\" />
+    <Folder Include="Areas\CMA\Views\Shared\" />
+    <Folder Include="Areas\CommonComponent\Views\Shared\" />
+    <Folder Include="Areas\D2k_Inventory\Views\Shared\" />
+    <Folder Include="Areas\EWS\Controllers\" />
+    <Folder Include="Areas\EWS\Models\" />
+    <Folder Include="Areas\FAM\Views\Shared\" />
+    <Folder Include="Areas\IFAM_Premises\Views\Shared\" />
+    <Folder Include="Areas\Krishak\Views\App_GetBranchName\" />
+    <Folder Include="Areas\Krishak\Views\Shared\" />
+    <Folder Include="Areas\LOS\Views\Shared\" />
+    <Folder Include="Areas\Reports\Views\Shared\" />
+    <Folder Include="Areas\UPGRADATION\Views\AxisUpgradation\" />
+    <Folder Include="Areas\UPGRADATION\Views\Shared\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>16870</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:16870/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,125 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.FAM.Models.Repository.AssetCommonRepository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.FAM.Controllers
+{
+    public class AssetCommonController : ApiController
+    {
+        IAssetCommonRepository repository;
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        UtilityWeb objutility = new UtilityWeb();
+
+        public AssetCommonController(IAssetCommonRepository repository)
+        {
+            this.repository = repository;
+        }
+
+
+        #region Asset Block 
+       
+
+        [Route("CrisMAc/CommonAssetAuxFetch/{param}")]
+        [HttpGet]
+        public string CommonAssetAuxFetch(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetAuxdata(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [Route("CrisMAc/AssetBlockFetch/{param}")]
+        [HttpGet]
+        public string AssetBlockFetch(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.FetchData(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [Route("CrisMAc/AssetBlockInsertUpdate/")]
+        [HttpPost]
+        public HttpResponseMessage AssetBlockInsertUpdate()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateDataAssetBlock(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+        #endregion
+
+        #region Asset Sub Block
+
+        [Route("CrisMAc/AssetSubBlockFetch/{param}")]
+        [HttpGet]
+        public string AssetSubBlockFetch(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.SubBlockFetchData(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+
+        [Route("CrisMAc/AssetSubBlockInsertUpdate/")]
+        [HttpPost]
+        public HttpResponseMessage AssetSubBlockInsertUpdate()
+        {
+            object result = new
+            {
+                Result = -1,
+                D2Ktimestamp = 0
+            };
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                var _mainData = objutility.DecryptString(_data);
+                result = repository.InsertUpdateDataSubAssetBlock(_mainData);
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.NotModified);
+                response.Headers.Add("Result", objutility.EnryptString(result.ToString()));
+
+                return response;
+            }
+        }
+
+        #endregion
+    }
+
+}

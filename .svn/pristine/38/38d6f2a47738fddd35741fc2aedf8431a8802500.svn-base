@@ -1,0 +1,44 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.UPGRADATION.Models.Repository.ViewAuxSelect;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.UPGRADATION.Controllers
+{
+    public class ViewAuxSelectController : ApiController
+    {
+        IViewAuxSelectRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+
+        public ViewAuxSelectController(IViewAuxSelectRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [Route("CrisMAc/CustomerAuxSelect/{param}")]
+        [HttpGet]
+        public string CustomerAuxSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.CustomerAuxSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+
+        [Route("CrisMAc/AccountAuxSelect/{param}")]
+        [HttpGet]
+        public string AccountAuxSelect(string param)
+        {
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.AccountAuxSelectRepo(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            return objutility.EnryptString(json);
+        }
+    }
+}

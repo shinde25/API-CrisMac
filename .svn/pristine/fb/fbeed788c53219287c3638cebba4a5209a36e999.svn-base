@@ -1,0 +1,31 @@
+﻿using CrisMAcAPI.Areas.CommonComponent.Models;
+using System.Data;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
+using System;
+
+namespace CrisMAcAPI.Areas.LOS.Models.Repository.CustomerRepository
+{
+    public class CustomerRepository : ICustomerRepository
+    {
+        CustomerModel _CustomerModel;
+        DataSet _DataSet;
+        JavaScriptSerializer serializer;
+        public DataSet GetMasterData(string Parameters)
+        {
+            _CustomerModel = new CustomerModel();
+            serializer = new JavaScriptSerializer();
+            _CustomerModel = serializer.Deserialize<CustomerModel>(Parameters);
+            _DataSet = new DataSet();
+            _DataSet = _CustomerModel.GetMasterData().SetTableName();
+            return _DataSet;
+        }
+
+
+        public JObject InsertQECApplication(string jsonData)
+        {
+            return new JavaScriptSerializer().Deserialize<CustomerModel>(jsonData).InsertQECApplication();
+        }
+
+    }
+}

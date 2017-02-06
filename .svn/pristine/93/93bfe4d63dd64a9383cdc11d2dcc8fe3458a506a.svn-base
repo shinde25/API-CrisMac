@@ -1,0 +1,145 @@
+﻿using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Web;
+
+namespace CrisMAcAPI.Models
+{
+    public class AlertMessageCreationModel : CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+       
+        public string ScreenFlag { get; set; }
+        public int AlertMessageAlt_key { get; set; }
+        public string MessageFor { get; set; }
+        public string Location { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+        public string Active { get; set; }
+        public string MessageDesc { get; set; }
+        public string LocationListAlt_key { get; set; }
+
+
+
+        public DataSet FetchAlertMessageDetails()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("AlertMessageSelect");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "@AlertMessageAlt_key", System.Data.DbType.Int32, AlertMessageAlt_key);
+                  
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public DataSet AlertMessageAuxData()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("AlertMessageCreationAux");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "@screenFlag", System.Data.DbType.String, ScreenFlag);
+                   database.AddInParameter(command, "@UserId", System.Data.DbType.String, _userLoginId);
+                  
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public DataSet AlertMessageMetaData()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("AlertMessageCreationParameterise");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+
+                    database.AddInParameter(command, "@TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    //database.AddInParameter(command, "@screenFlag", System.Data.DbType.String, ScreenFlag);
+                    //database.AddInParameter(command, "@UserId", System.Data.DbType.String, _userLoginId);
+
+                    ds = database.ExecuteDataSet(command);
+                }
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public object InsertUpdateAlertMessageDetails()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("AlertMessageInsertUpdate");
+            DataSet ds = new DataSet();
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "@AlertMessageAlt_key", System.Data.DbType.Int32, AlertMessageAlt_key);
+                    database.AddInParameter(command, "@MessageFor", System.Data.DbType.String, MessageFor);
+                    database.AddInParameter(command, "@Location", System.Data.DbType.String, Location);
+                    database.AddInParameter(command, "@FromDate", System.Data.DbType.String, FromDate);
+                    database.AddInParameter(command, "@ToDate", System.Data.DbType.String, ToDate);
+                    database.AddInParameter(command, "@Active", System.Data.DbType.String, Active);
+                    database.AddInParameter(command, "@MessageDesc", System.Data.DbType.String, MessageDesc);
+                    database.AddInParameter(command, "@LocationListAlt_key", System.Data.DbType.String, LocationListAlt_key);
+                    database.AddInParameter(command, "EffectiveFromTimeKey", System.Data.DbType.Int32, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "EffectiveToTimeKey", System.Data.DbType.Int32, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "@DateCreatedModifiedApproved", System.Data.DbType.DateTime, DateTime.Now);
+                    database.AddInParameter(command, "@CreateModifyApprovedBy", System.Data.DbType.String, _CreatetedModifiedBy);
+                    database.AddInParameter(command, "OperationFlag", System.Data.DbType.Int32, _OperationFlag);
+                    database.AddInParameter(command, "AuthMode", System.Data.DbType.String, _AuthMode);
+                    database.AddInParameter(command, "MenuID", System.Data.DbType.Int32, _MenuID);
+                   
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddOutParameter(command, "D2Ktimestamp", System.Data.DbType.Int32, _D2Ktimestamp);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            JObject DBReturnResult = new JObject();
+            DBReturnResult.Add("Result", (command.Parameters)[command.Parameters.Count - 1].Value.ToString());
+            DBReturnResult.Add("D2Ktimestamp", (command.Parameters)[command.Parameters.Count - 2].Value.ToString());
+
+            return DBReturnResult;
+        }
+    }
+
+
+        
+    }

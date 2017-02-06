@@ -1,0 +1,85 @@
+﻿using CrisMAcAPI.Areas.CommonComponent.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.Axis_MOC.Models.Repository.Incorporation
+{
+    public class CustAccountMocRepository :ICustAccountMocRepository
+    {
+
+        CustAccountMocModel _IncorporationModel;
+        DataSet _DataSet;
+        JavaScriptSerializer serializer;
+        
+        public List<object> GetIncorporation(string paramString)
+        {
+            _IncorporationModel = new CustAccountMocModel();
+            serializer = new JavaScriptSerializer();
+            _IncorporationModel = serializer.Deserialize<CustAccountMocModel>(paramString);
+
+            _DataSet = new DataSet();
+            _IncorporationModel.Incorporation();
+            _DataSet = _IncorporationModel.ResultDataSet;//GetCustAccountGrid
+
+            return _DataSet.ToList();
+        }
+
+        public List<object> GetParametriceMeta(string paramString)
+        {
+            _IncorporationModel = new CustAccountMocModel();
+            serializer = new JavaScriptSerializer();
+            _IncorporationModel = serializer.Deserialize<CustAccountMocModel>(paramString);
+
+            _DataSet = new DataSet();
+            _IncorporationModel.Parametrice();
+
+
+
+            _DataSet = _IncorporationModel.ResultDataSet;
+
+            return _DataSet.ToList();
+        }
+
+
+        public List<object> GetCustAccountGrid(string paramString)
+        {
+            _IncorporationModel = new CustAccountMocModel();
+            serializer = new JavaScriptSerializer();
+            _IncorporationModel = serializer.Deserialize<CustAccountMocModel>(paramString);
+
+            _DataSet = new DataSet();
+            _IncorporationModel.CustAccountGrid();
+            _DataSet = _IncorporationModel.ResultDataSet;
+            return _DataSet.ToList();
+        }
+
+        public object GetCustAccountInsertUpdate(string jsonData)
+        {
+            object rval = null;
+            serializer = new JavaScriptSerializer();
+            _IncorporationModel = serializer.Deserialize<CustAccountMocModel>(jsonData);
+            rval = _IncorporationModel.CustAccountMOCInsertUpdate();
+            return rval;
+        }
+
+        public List<object> GetCustAccountExcelUpload(string jsonData)
+        {
+            object rval = null;
+            serializer = new JavaScriptSerializer();
+            _IncorporationModel = serializer.Deserialize<CustAccountMocModel>(jsonData);
+
+            _DataSet = new DataSet();
+            _IncorporationModel.CustAccountExcelUpload();
+            _DataSet = _IncorporationModel.ResultDataSet;
+            return _DataSet.ToList();
+
+
+
+
+        }
+    }
+}

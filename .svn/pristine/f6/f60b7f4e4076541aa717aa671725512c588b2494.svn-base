@@ -1,0 +1,147 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Models.Repository.CompanyWiseExchSymbolRepository
+{
+    public class CompanyWiseExchSymbolRepository : ICompanyWiseExchSymbolRepository
+    {
+        CompanyWiseExchSymbolModel objExchSymbolModel = new CompanyWiseExchSymbolModel();
+
+        
+
+        public List<object> FetchData(string paramString)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            objExchSymbolModel = serializer.Deserialize<CompanyWiseExchSymbolModel>(paramString);
+            objExchSymbolModel.CompanyWiseExchSymbolFetch();
+            DataSet _FetchDataAuxDS = objExchSymbolModel.ResultDataSet;
+            List<object> LstObj = new List<object>();
+
+            var DataVal = _FetchDataAuxDS.Tables[0].AsEnumerable().Select(x =>
+              new
+              {
+                  CompanyCode = x.Field<int>("CompanyCode"),
+                  Symbol = x.Field<string>("Symbol"),
+                  DisplayName = x.Field<string>("DisplayName"),
+                  
+                  IsMainTable = x.Field<string>("IsMainTable"),
+                  CreatedModifiedBy = x.Field<string>("CreatedModifiedBy"),
+                  AuthorisationStatus = x.Field<string>("AuthorisationStatus"),
+                  D2Ktimestamp = x.Field<int>("D2Ktimestamp"),
+                  ExchangeKey = x.Field<Int16>("ExchangeKey")
+              }).Take(1).ToList();
+
+            var Data = _FetchDataAuxDS.Tables[0].AsEnumerable().Select(x =>
+              new
+              {
+                  CompanyCode = x.Field<int>("CompanyCode"),
+                  Symbol = x.Field<string>("Symbol"),
+                  DisplayName = x.Field<string>("DisplayName"),
+
+                  IsMainTable = x.Field<string>("IsMainTable"),
+                  CreatedModifiedBy = x.Field<string>("CreatedModifiedBy"),
+                  AuthorisationStatus = x.Field<string>("AuthorisationStatus"),
+                  D2Ktimestamp = x.Field<int>("D2Ktimestamp"),
+                  ExchangeKey = x.Field<Int16>("ExchangeKey")
+              }).ToList();
+
+            LstObj.Add(DataVal);
+
+            LstObj.Add(Data);
+
+            var DataModelList = ((IEnumerable<dynamic>)LstObj).ToList();
+            return DataModelList;
+        }
+
+
+        public List<object> GetAuxdata(string paramString)
+        {
+            List<object> lst = new List<object>();
+            try
+            {
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+                objExchSymbolModel = serializer.Deserialize<CompanyWiseExchSymbolModel>(paramString);
+
+                objExchSymbolModel.CompanyWiseExchSymbolAuxSelect();
+                DataSet _dsAux = objExchSymbolModel.ResultDataSet;
+
+                var lstAux = _dsAux.Tables[0].AsEnumerable().Select(x =>
+                      new
+                      {
+                          Company_Name = x.Field<string>("Company_Name"),
+                          CompanyAlt_Key = x.Field<int>("CompanyAlt_Key"),
+                         
+                      }).ToList();
+
+                var lstActivityGrp = _dsAux.Tables[1].AsEnumerable().Select(x =>
+                      new
+                      {
+                          StockExchangeName = x.Field<string>("StockExchangeName"),
+                          StockExchangeAlt_Key = x.Field<Int16>("StockExchangeAlt_Key")
+                          
+                      }).ToList();
+
+               // var lstDimListing = _dsAux.Tables[2];
+
+                //var lstActivityName = _dsAux.Tables[2].AsEnumerable().Select(x =>
+                //      new
+                //      {
+                //          ActivityAlt_Key = x.Field<Int16>("ActivityAlt_Key"),
+                //          ActivityName = x.Field<string>("ActivityName"),
+                //          ActivityGroup = x.Field<string>("ActivityGroup"),
+                //          IndustryName = x.Field<string>("IndustryName")
+                //      }).ToList();
+
+                //var lstIndustryName = _dsAux.Tables[3].AsEnumerable().Select(x =>
+                //      new
+                //      {
+                //          EWSIndustryName = x.Field<string>("EWSIndustryName"),
+                //          ActivityGroup = x.Field<string>("ActivityGroup")
+                //      }).ToList();
+
+                lst.Add(lstAux);
+                lst.Add(lstActivityGrp);
+               // lst.Add(lstDimListing);
+                //lst.Add(lstActivityName);
+                //lst.Add(lstIndustryName);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            var _AuxData = ((IEnumerable<dynamic>)lst).ToList();
+            return _AuxData;
+        }
+    
+
+        public List<object> GetMetaData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int InsertUpdateData(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object CompanyWiseExchSymbolInsertUpdateData(string jsonData)
+        {
+            object rval = null;
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            CompanyWiseExchSymbolModel jSonModel = serializer.Deserialize<CompanyWiseExchSymbolModel>(jsonData);
+
+            rval = jSonModel.CompanyWiseExchSymbolSave();
+
+            return rval;
+        }
+    }
+}

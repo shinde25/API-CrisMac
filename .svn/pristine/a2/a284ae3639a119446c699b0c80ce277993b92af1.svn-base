@@ -1,0 +1,90 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.IFAM_Premises.Models.Repository.PremiseTransactionMainRepository;
+using CrisMAcAPI.Filter;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+
+namespace CrisMAcAPI.Areas.IFAM_Premises.Controllers
+{
+    [Authorize]
+    [LogFilter]
+    public class PremiseTransactionMainController : ApiController
+    {
+        IPremiseTransactionMainRepository repository;
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+        UtilityWeb objutility = new UtilityWeb();
+        public PremiseTransactionMainController(IPremiseTransactionMainRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        //      parmatrised    **************************** //
+        //[Authorize]
+        [Route("CrisMAc/GetMetaPremiseTransactionMain/{param}")]
+        [HttpGet]
+        public string GetMetaPremiseTransactionMain(string param)
+        {
+
+            param = objutility.DecryptString(param);
+            var objAuxDetail = repository.GetMetaData(param);
+            var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+            // Request.Properties["UserId"] = "akshay123";
+            return objutility.EnryptString(json);
+        }
+
+
+        //     Transaction maIn Grid data FETCH   ************************    //
+        [Route("CrisMAc/PremiseMainTransactionDataFetch/{param}")]
+        [HttpGet]
+        public string PremiseMainTransactionDataFetch(string param)
+        {
+            JObject JsonParam = new JObject();
+            param = objutility.DecryptString(param);
+            string[] strJson = param.Split(',', '{', '}');
+            if (strJson[0].ToString().Contains("Txn"))
+            {
+                JsonParam.Add("ScreenType", strJson[0]);
+                JsonParam.Add("_BranchCode", strJson[1]);
+                JsonParam.Add("UserLoginID", strJson[2]);
+                JsonParam.Add("AssetBlockAlt_Key", strJson[3]);
+                JsonParam.Add("AssetSubBlockAlt_Key", strJson[4]);
+                JsonParam.Add("AssetSearchString", strJson[5]);
+                //JsonParam.Add("AssetLocation", strJson[6]);
+                JsonParam.Add("_TimeKey", strJson[7]);
+              //  JsonParam.Add("TxnType", strJson[8]);
+                //JsonParam.Add("PurchaseDateFrom", strJson[10]);
+                //JsonParam.Add("PurchaseDateTo", strJson[11]);
+                //JsonParam.Add("PurchaseAmountFrom", strJson[12]);
+                //JsonParam.Add("PurchaseAmountTo", strJson[13]);
+
+                var objAuxDetail = repository.FetchData(JsonParam.ToString());
+                var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+                return objutility.EnryptString(json);
+            }
+            else
+            {
+                JsonParam.Add("ScreenType", strJson[0]);
+                JsonParam.Add("_BranchCode", strJson[1]);
+                JsonParam.Add("UserLoginID", strJson[2]);
+                JsonParam.Add("AssetBlockAlt_Key", strJson[3]);
+                JsonParam.Add("AssetSubBlockAlt_Key", strJson[4]);
+                //JsonParam.Add("AssetSearchString", strJson[5]);
+                //JsonParam.Add("AssetLocation", strJson[6]);
+                JsonParam.Add("TxnStatus", strJson[7]);
+                JsonParam.Add("TxnType", strJson[8]);
+                JsonParam.Add("TxnDateFrom", strJson[9]);
+                JsonParam.Add("TxnDateTo", strJson[10]);
+                JsonParam.Add("_TimeKey", strJson[11]);
+                var objAuxDetail = repository.FetchData(JsonParam.ToString());
+                var json = _JavaScriptSerializer.Serialize(objAuxDetail);
+                return objutility.EnryptString(json);
+            }
+        }
+    }
+}

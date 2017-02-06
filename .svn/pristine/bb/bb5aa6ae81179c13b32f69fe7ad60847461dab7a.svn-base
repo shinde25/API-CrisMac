@@ -1,0 +1,192 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+using System.Data.SqlClient;
+using CrisMAc.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using System.Data.Common;
+
+namespace CrisMAcAPI.Models
+{
+    public class UserchangedUserpwd:CommonProperties
+    {
+        DatabaseProviderFactory factory = new DatabaseProviderFactory();
+        public string userLoginId { get; set; }
+        public string username { get; set; }  
+        public string Oldpwd { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfiremedNewPwd { get; set; }
+        public string Location { get; set; }
+
+        public string Userrole { get; set; }
+        public string BranchCode { get; set; }
+        public string DefaultPassward { get; set; }
+        public string FrmType { get; set; }
+
+        public int GetUserChangePasswordSelect()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("dbo.UserChangePasswordUpdate");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "UserLoginID", System.Data.DbType.String, userLoginId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "LoginPassword", System.Data.DbType.String, NewPassword);
+                    database.AddInParameter(command, "PasswordChangeDate", System.Data.DbType.DateTime, System.DateTime.Now);
+                    database.AddInParameter(command, "EffectiveFromTimeKey", System.Data.DbType.Int32, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "EffectiveToTimeKey", System.Data.DbType.Int32, _EffectiveToTimeKey);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                string a = ex.ToString();
+            }
+            return (int)(command.Parameters)[6].Value;
+        }
+        public void GetUserCreationForResetPwdAuxSelect()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@UserLoginID",userLoginId),
+                                               new SqlParameter("@TimeKey", _TimeKey),
+                                               new SqlParameter("@strloginId", username),
+
+
+                };
+            spName = "dbo.EWS_UserCreationForResetPwdAuxSelect";
+            ExecuteSelect();
+        }
+        public int  SetUserResetPasswordUpdate()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                   new SqlParameter("@UserLoginID",userLoginId),
+            //                                   new SqlParameter("@TimeKey", _TimeKey),
+            //                                   new SqlParameter("@LoginPassword ",DefaultPassward),
+            //                                   new SqlParameter("@EffectiveFromTimeKey",_EffectiveFromTimeKey),
+            //                                   new SqlParameter("@EffectiveToTimeKey",_EffectiveToTimeKey),
+            //                                   new SqlParameter("@CreatedBy ",_EffectiveToTimeKey)
+            //    };
+            //spName = "UserResetPasswordUpdate";
+            //ExecuteUpdate();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("dbo.UserResetPasswordUpdate_NEW");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "UserLoginID", System.Data.DbType.String, userLoginId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "LoginPassword", System.Data.DbType.String, NewPassword);
+                  
+                    database.AddInParameter(command, "EffectiveFromTimeKey", System.Data.DbType.Int32, _EffectiveFromTimeKey);
+                    database.AddInParameter(command, "EffectiveToTimeKey", System.Data.DbType.Int32, _EffectiveToTimeKey);
+                    database.AddInParameter(command, "CreatedBy", System.Data.DbType.Int32, _EffectiveToTimeKey);
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                string a = ex.ToString();
+            }
+            return (int)(command.Parameters)[6].Value;
+
+        }
+        public void GetUserInfoAuxSelect()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@UserLoginID",userLoginId),
+                                               new SqlParameter("@TimeKey", _TimeKey),
+                                               new SqlParameter("@FrmType ",FrmType)
+                };
+            spName = "dbo.EWS_UserDeletionAuxSelect";
+            ExecuteSelect();
+        }
+        public void GetSuspendedUserAuxSelect()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@UserLoginID",userLoginId),
+                                               new SqlParameter("@TimeKey", _TimeKey)
+                };
+            spName = "SuspendedUserAuxSelect";
+            ExecuteSelect();
+        }
+        public void GetUserLoginAuxSelect()
+        {
+            sqlParams = new SqlParameter[] {
+                                               new SqlParameter("@UserLoginID",userLoginId),
+                                               new SqlParameter("@TimeKey", _TimeKey)
+                };
+            spName = "UserLoginAuxSelect";
+            ExecuteSelect();
+        }
+        //public void SetInvokedUserSuspendUpdate()
+        //{
+        //    sqlParams = new SqlParameter[] {
+        //                                       new SqlParameter("@UserLoginID",userLoginId),
+        //                                       new SqlParameter("@TimeKey", _TimeKey),
+        //                                       new SqlParameter("@LoginPassword ",NewPassword),
+        //                                       new SqlParameter("@ModifiedBy",userLoginId),
+        //        };
+        //    spName = "InvokedUserSuspendUpdate";
+        //    ExecuteUpdate();
+        //}
+
+        public int SetInvokedUserSuspendUpdate()
+        {
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("InvokedUserSuspendUpdate");
+
+            using (command)
+            {
+                database.AddInParameter(command, "UserLoginID", System.Data.DbType.String, userLoginId);
+                database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                database.AddInParameter(command, "LoginPassword", System.Data.DbType.String, NewPassword);
+                database.AddInParameter(command, "ModifiedBy", System.Data.DbType.String, userLoginId);
+                database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+                database.ExecuteNonQuery(command);
+            }
+
+            return (int)(command.Parameters)[command.Parameters.Count - 1].Value;
+        }
+
+        public int SetUserLoginInvokeUpdate()
+        {
+            //sqlParams = new SqlParameter[] {
+            //                                   new SqlParameter("@UserLoginID",userLoginId),
+            //                                   new SqlParameter("@TimeKey", _TimeKey),
+            //                                   new SqlParameter("@LoginPassword ",NewPassword)
+            //    };
+            //spName = "UserLoginInvokedUpdate";
+            //ExecuteUpdate();
+
+            Database database = factory.Create("ConnStringDecr");
+            DbCommand command = database.GetStoredProcCommand("dbo.UserLoginInvokedUpdate");
+            try
+            {
+                using (command)
+                {
+                    database.AddInParameter(command, "UserLoginID", System.Data.DbType.String, userLoginId);
+                    database.AddInParameter(command, "TimeKey", System.Data.DbType.Int32, _TimeKey);
+                    database.AddInParameter(command, "LoginPassword", System.Data.DbType.String, NewPassword);                   
+                    database.AddOutParameter(command, "Result", System.Data.DbType.Int32, -1);
+
+                    database.ExecuteNonQuery(command);
+                }
+            }
+            catch (Exception ex)
+            {
+                string a = ex.ToString();
+            }
+            return (int)(command.Parameters)[6].Value;
+        }
+    }
+}

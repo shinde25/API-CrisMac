@@ -1,0 +1,61 @@
+﻿using CrisMAc.Models.Utility;
+using CrisMAcAPI.Areas.LOS.Models.Repository.CustomerRepository;
+using System;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
+using System.Web.Script.Serialization;
+using CrisMAcAPI.Areas.LOS.Models.Repository.UserRepository;
+
+namespace CrisMAcAPI.Areas.LOS.Controllers
+{
+    public class UserController : ApiController
+    {
+        IUserRepository repository;
+        UtilityWeb objutility = new UtilityWeb();
+        JavaScriptSerializer _JavaScriptSerializer = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue, RecursionLimit = 100 };
+       
+        public UserController(IUserRepository repository)
+        {
+            this.repository = repository;
+        }
+
+       
+        [Route("CrisMAc/InsertUserProfile/")]
+        [HttpPost]
+        public string InsertUserProfile()
+        {
+            try
+            {
+                string _data = Request.Content.ReadAsStringAsync().Result;
+                  var _mainData = objutility.DecryptString(_data); ;
+                var ResultData = repository.InsertUserProfile(_data);
+                var json = JsonConvert.SerializeObject(ResultData);
+                return objutility.EnryptString(json);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        [Route("CrisMAc/UserAuthentication/{Parameters}")]
+        [HttpGet]
+        public string UserAuthentication(string Parameters)
+        {
+            try
+            {
+                Parameters = objutility.DecryptString(Parameters);
+                var LstData = repository.UserAuthentication(Parameters);
+                var json = JsonConvert.SerializeObject(LstData, Formatting.Indented);
+                return objutility.EnryptString(json);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+    }
+}
