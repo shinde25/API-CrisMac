@@ -13,7 +13,7 @@ namespace CrisMAcAPI.Areas.FAM.Models
     {
         DatabaseProviderFactory factory = new DatabaseProviderFactory();
         public int AssetBlockAlt_key { get; set; }
-        public int AssetBlockAlt { get; set; }
+        
         public int AssetBlockAlt3 { get; set; }
         public string AssetBlockName { get; set; }
         public string AssetBlockShortName { get; set; }
